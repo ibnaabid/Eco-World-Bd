@@ -4,6 +4,7 @@ import "./globals.css";
 
 import BambooNavbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer";
+import { Toaster } from "react-hot-toast";
  
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({
         <main className="flex-1">
           {children}
         </main>
+        <Toaster/>
 
        <Footer/>
       </body>
