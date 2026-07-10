@@ -23,11 +23,11 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard Overview", href: "/admin/dashboard", icon: LayoutDashboard },
-    { id: "add-product", label: "Add New Product", href: "/admin/add-product", icon: PlusCircle },
+    { id: "dashboard", label: "Dashboard Overview", href: "/dashboard/admin/dashboard", icon: LayoutDashboard },
+    { id: "add-product", label: "Add New Product", href: "/dashboard/admin/add-product", icon: PlusCircle },
 
-    { id: "Craft", label: "Manage Crafts", href: "/admin/craft", icon: Users },
-    { id: "privacy", label: "Privacy & Guardrails", href: "/admin/privacy", icon: ShieldCheck },
+    { id: "Craft", label: "Manage Crafts", href: "/dashboard/admin/craft", icon: Users },
+    { id: "privacy", label: "Privacy & Guardrails", href: "/dashboard/admin/privacy", icon: ShieldCheck },
   ];
 
   return (
@@ -110,9 +110,9 @@ export default function AdminSidebar() {
       {/* ⚙️ Bottom Action Layout Footer */}
       <div className="p-4 border-t border-white/[0.06] bg-black/10 flex flex-col gap-3">
         <Link 
-          href="/admin/settings"
+          href="/dashboard/admin/settings"
           className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-colors ${
-            pathname === "/admin/settings" ? "text-white bg-white/5" : "text-white/50 hover:text-white"
+            pathname === "/dashboard/admin/settings" ? "text-white bg-white/5" : "text-white/50 hover:text-white"
           }`}
         >
           <Settings size={16} />
