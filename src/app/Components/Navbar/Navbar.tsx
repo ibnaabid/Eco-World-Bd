@@ -1,8 +1,12 @@
-"use client"
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ShoppingBasket, Menu, X, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShoppingBasket, Menu, ChevronDown, User } from "lucide-react";
+import { authClient } from "@/app/lib/auth-client";
+// Better Auth ক্লায়েন্ট ইমপোর্ট করুন (আপনার প্রজেক্টের পাথ অনুযায়ী পরিবর্তন করতে পারেন)
+
 
 const colors = {
   forest: "#1F3D2B",
@@ -16,7 +20,7 @@ const colors = {
 interface NavLink {
   label: string;
   href: string;
-  variant?: "button" | "outline"; // "button" = filled pill, "outline" = outlined pill, undefined = plain link
+  variant?: "button" | "outline" | "username"; // "username" ভ্যারিয়েন্ট যোগ করা হয়েছে প্রোফাইল টেক্সটের জন্য
 }
 
 // Logged out — 7 routes
@@ -30,27 +34,39 @@ const loggedOutLinks: NavLink[] = [
   { label: "Register", href: "/register", variant: "button" },
 ];
 
-// Logged in — 8 routes
+// Logged in — 6 base routes (Username এবং Logout নিচে ডায়নামিক্যালি হ্যান্ডেল করা হবে)
 const loggedInLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "My Orders", href: "/orders" },
   { label: "Wishlist", href: "/wishlist" },
-  { label: "Profile", href: "/profile" },
   { label: "Blog", href: "/blog" },
-  { label: "Logout", href: "/logout", variant: "outline" },
+  { label: "About", href: "/about" },
 ];
 
 export default function BambooNavbar(): JSX.Element {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // replace with real auth/session state
   const [activeLink, setActiveLink] = useState("Home");
   const panelRef = useRef<HTMLDivElement>(null);
   const [panelHeight, setPanelHeight] = useState(0);
   const cartCount = 3;
 
-  const links = isLoggedIn ? loggedInLinks : loggedOutLinks;
+  // Better Auth থেকে সেশন এবং ইউজারের ডাটা ফেচ করা হচ্ছে
+  const { data: session, isPending } = authClient.useSession();
+  const isLoggedIn = !!session;
+  const username = session?.user?.name || "Profile";
+
+  // ডায়নামিক্যালি লিংক জেনারেট করা হচ্ছে সেশনের ওপর ভিত্তি করে
+  const links: NavLink[] = isLoggedIn
+    ? [
+        ...loggedInLinks,
+        { label: username, href: "/dashboard", variant: "username" },
+        { label: "Logout", href: "#", variant: "outline" },
+      ]
+    : loggedOutLinks;
+
   const plainLinks = links.filter((l) => !l.variant);
   const actionLinks = links.filter((l) => l.variant);
 
@@ -58,7 +74,19 @@ export default function BambooNavbar(): JSX.Element {
     if (panelRef.current) {
       setPanelHeight(menuOpen ? panelRef.current.scrollHeight : 0);
     }
-  }, [menuOpen, isLoggedIn]);
+  }, [menuOpen, isLoggedIn, isPending]);
+
+  // Logout হ্যান্ডলার
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/"); // লগআউট সফল হলে হোমপেজে নিয়ে যাবে
+          router.refresh();
+        },
+      },
+    });
+  };
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -105,10 +133,10 @@ export default function BambooNavbar(): JSX.Element {
               </h2>
             </Link>
 
-            {/* Desktop nav — plain route links, side by side from lg breakpoint */}
+            {/* Desktop nav — plain route links */}
             <div className="hidden lg:flex items-center gap-4 xl:gap-5 flex-1 justify-center min-w-0 overflow-hidden">
-              {plainLinks.map((link) => (
-                <a
+              {!isPending && plainLinks.map((link) => (
+                <Link
                   key={link.label}
                   href={link.href}
                   onClick={() => setActiveLink(link.label)}
@@ -118,11 +146,11 @@ export default function BambooNavbar(): JSX.Element {
                   style={{ color: activeLink === link.label ? colors.bambooTan : colors.cream }}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
 
-            {/* Desktop actions — cart + auth action links (Login/Register or Logout) */}
+            {/* Desktop actions — cart + auth actions */}
             <div className="hidden lg:flex items-center gap-2.5 shrink-0">
               <button aria-label="Cart" className="relative p-2 rounded-full transition-colors hover:bg-white/5">
                 <ShoppingBasket size={17} color={colors.cream} strokeWidth={1.8} />
@@ -136,25 +164,51 @@ export default function BambooNavbar(): JSX.Element {
                 )}
               </button>
 
-              {actionLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => {
-                    setActiveLink(link.label);
-                    if (link.label === "Register") setIsLoggedIn(true); // demo only
-                    if (link.label === "Logout") setIsLoggedIn(false); // demo only
-                  }}
-                  className="text-[12.5px] xl:text-[13px] font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors"
-                  style={
-                    link.variant === "button"
-                      ? { backgroundColor: colors.ochre, color: colors.cream }
-                      : { border: "1px solid rgba(201,168,118,0.35)", color: colors.cream }
-                  }
-                >
-                  {link.label}
-                </a>
-              ))}
+              {!isPending && actionLinks.map((link) => {
+                if (link.label === "Logout") {
+                  return (
+                    <button
+                      key={link.label}
+                      onClick={handleLogout}
+                      className="text-[12.5px] xl:text-[13px] font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors border"
+                      style={{ borderColor: "rgba(201,168,118,0.35)", color: colors.cream }}
+                    >
+                      Logout
+                    </button>
+                  );
+                }
+
+                if (link.variant === "username") {
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setActiveLink(link.label)}
+                      className="flex items-center gap-1.5 text-[12.5px] xl:text-[13px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap bg-white/10 max-w-[150px] truncate"
+                      style={{ color: colors.bambooTan }}
+                    >
+                      <User size={14} />
+                      <span className="truncate">{link.label}</span>
+                    </Link>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setActiveLink(link.label)}
+                    className="text-[12.5px] xl:text-[13px] font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors"
+                    style={
+                      link.variant === "button"
+                        ? { backgroundColor: colors.ochre, color: colors.cream }
+                        : { border: "1px solid rgba(201,168,118,0.35)", color: colors.cream }
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Mobile dropdown toggle */}
@@ -187,9 +241,9 @@ export default function BambooNavbar(): JSX.Element {
         >
           <div ref={panelRef} className="px-5 pb-6 pt-3">
             <div className="max-w-[1500px] mx-auto flex flex-col">
-              {plainLinks.map((link, i) => (
+              {!isPending && plainLinks.map((link, i) => (
                 <div key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     onClick={() => {
                       setActiveLink(link.label);
@@ -199,7 +253,7 @@ export default function BambooNavbar(): JSX.Element {
                     style={{ color: activeLink === link.label ? colors.bambooTan : colors.cream }}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                   {i < plainLinks.length - 1 && (
                     <div style={{ height: 1, background: "rgba(201,168,118,0.12)" }} />
                   )}
@@ -219,26 +273,60 @@ export default function BambooNavbar(): JSX.Element {
                   )}
                 </button>
 
-                {actionLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => {
-                      setActiveLink(link.label);
-                      setMenuOpen(false);
-                      if (link.label === "Register") setIsLoggedIn(true);
-                      if (link.label === "Logout") setIsLoggedIn(false);
-                    }}
-                    className="flex-1 flex items-center justify-center py-2.5 rounded-full text-[13.5px] font-semibold"
-                    style={
-                      link.variant === "button"
-                        ? { backgroundColor: colors.ochre, color: colors.cream }
-                        : { border: "1px solid rgba(201,168,118,0.35)", color: colors.cream }
-                    }
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {!isPending && actionLinks.map((link) => {
+                  if (link.label === "Logout") {
+                    return (
+                      <button
+                        key={link.label}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          handleLogout();
+                        }}
+                        className="flex-1 flex items-center justify-center py-2.5 rounded-full text-[13.5px] font-semibold border"
+                        style={{ borderColor: "rgba(201,168,118,0.35)", color: colors.cream }}
+                      >
+                        Logout
+                      </button>
+                    );
+                  }
+
+                  if (link.variant === "username") {
+                    return (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        onClick={() => {
+                          setActiveLink(link.label);
+                          setMenuOpen(false);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[13.5px] font-medium bg-white/10 truncate"
+                        style={{ color: colors.bambooTan }}
+                      >
+                        <User size={14} />
+                        <span className="truncate">{link.label}</span>
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => {
+                        setActiveLink(link.label);
+                        setMenuOpen(false);
+                      }}
+                      className="flex-1 flex items-center justify-center py-2.5 rounded-full text-[13.5px] font-semibold"
+                      style={
+                        link.variant === "button"
+                          ? { backgroundColor: colors.ochre, color: colors.cream }
+                          : { border: "1px solid rgba(201,168,118,0.35)", color: colors.cream }
+                      }
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
