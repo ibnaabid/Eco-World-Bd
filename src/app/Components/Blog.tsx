@@ -1,4 +1,5 @@
 import { ArrowUpRight, Clock } from "lucide-react";
+import Image from "next/image";
 
 const colors = {
   forest: "#1F3D2B",
@@ -28,8 +29,7 @@ const posts: BlogPost[] = [
     date: "Jun 18, 2026",
     readTime: "4 min read",
     category: "Sustainability",
-    image:
-      "https://images.unsplash.com/photo-1470093851219-69951fcbb533?q=80&w=800&auto=format&fit=crop",
+    image:"/sam-bhattacharyya-Jau8u_R9deo-unsplash.jpg"
   },
   {
     id: 2,
@@ -39,8 +39,7 @@ const posts: BlogPost[] = [
     date: "Jun 05, 2026",
     readTime: "6 min read",
     category: "Artisans",
-    image:
-      "https://images.unsplash.com/photo-1516222338250-863216ce01ea?q=80&w=800&auto=format&fit=crop",
+    image:"/WhatsApp Image 2026-07-09 at 15.14.35.jpeg"
   },
   {
     id: 3,
@@ -50,8 +49,7 @@ const posts: BlogPost[] = [
     date: "May 22, 2026",
     readTime: "3 min read",
     category: "Guides",
-    image:
-      "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=800&auto=format&fit=crop",
+    image:"/minh-triet-c5TYG4b2QvI-unsplash.jpg"
   },
 ];
 
@@ -92,6 +90,8 @@ export default function BlogSection(): JSX.Element {
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <Image
+                height={500}
+                width={500}
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

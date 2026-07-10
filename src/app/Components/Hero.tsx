@@ -1,5 +1,7 @@
+"use client"
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight, Leaf } from "lucide-react";
+import Image from "next/image";
 
 const colors = {
   forest: "#1F3D2B",
@@ -10,26 +12,21 @@ const colors = {
   ochre: "#B8863B",
 };
 
-// Replace these with your own product/craft photos — keep 3-4 images
+// Fixed paths: assuming these images sit directly inside your 'public' folder
 const slides = [
   {
-    image:
-      "https://images.unsplash.com/photo-1602526429747-ac387a91d43b?q=80&w=1600&auto=format&fit=crop",
+    image: "/sam-bhattacharyya-Jau8u_R9deo-unsplash.jpg",
     label: "Woven Baskets",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1616627561950-9f746e330187?q=80&w=1600&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.03.47.jpeg",
     label: "Bamboo Furniture",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1600&auto=format&fit=crop",
-    label: "Home Decor",
+    image: "/WhatsApp Image 2026-07-09 at 15.14.30.jpeg",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?q=80&w=1600&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.14.25.jpeg",
     label: "Handmade Lighting",
   },
 ];
@@ -72,11 +69,14 @@ export default function BambooHero(): JSX.Element {
         {/* Slides */}
         <div className="absolute inset-0">
           {slides.map((s, i) => (
-            <img
+            <Image
               key={i}
               src={s.image}
-              alt={s.label}
-              className={`slide-img absolute inset-0 w-full h-full object-cover ${
+              alt={s.label || "Bamboo craft product"}
+              fill
+              priority={i === 0} // Loads the first image instantly
+              sizes="100vw"
+              className={`slide-img object-cover ${
                 i === active ? "show" : ""
               }`}
             />
@@ -145,7 +145,7 @@ export default function BambooHero(): JSX.Element {
           className="absolute bottom-7 left-5 md:left-8 text-[12px] tracking-[0.15em] uppercase font-medium"
           style={{ color: colors.bambooTan }}
         >
-          {slides[active].label}
+          {slides[active].label || "Home Decor"}
         </div>
 
         {/* Arrows */}

@@ -100,9 +100,9 @@ export default function BambooNavbar(): JSX.Element {
                 <path d="M15 7 C 8 5, 4 8, 3 3" stroke={colors.moss} strokeWidth="1.6" fill="none" strokeLinecap="round" />
                 <path d="M15 16 C 22 14, 26 17, 27 12" stroke={colors.moss} strokeWidth="1.6" fill="none" strokeLinecap="round" />
               </svg>
-              <span className="brand-font text-lg leading-none" style={{ color: colors.cream }}>
-                BambooCraft
-              </span>
+              <h2 className="brand-font text-lg leading-none" style={{ color: colors.cream }}>
+                Eco <span className="font-bold text-gray-400">World_Bd</span>
+              </h2>
             </Link>
 
             {/* Desktop nav — plain route links, side by side from lg breakpoint */}

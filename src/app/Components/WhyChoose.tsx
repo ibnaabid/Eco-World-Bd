@@ -1,4 +1,5 @@
 import { Leaf, Hammer, Truck, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 
 const colors = {
   forest: "#1F3D2B",
@@ -17,92 +18,133 @@ interface Reason {
 
 const reasons: Reason[] = [
   {
-    icon: <Leaf size={22} strokeWidth={1.7} />,
+    icon: <Leaf size={22} strokeWidth={1.5} />,
     title: "Grown, Not Manufactured",
     description:
-      "Bamboo regrows in 3-5 years without replanting — every piece starts as a renewable material, not a factory input.",
+      "Bamboo completely regrows in 3 to 5 years without complex replanting — every individual piece starts as a purely organic, renewable resource.",
   },
   {
-    icon: <Hammer size={22} strokeWidth={1.7} />,
+    icon: <Hammer size={22} strokeWidth={1.5} />,
     title: "Hand-Finished by Artisans",
     description:
-      "No two pieces are identical. Each is shaped, woven, and sanded by craftsmen across rural Bangladesh.",
+      "No assembly lines. Each product is intricately shaped, woven, and smoothly sanded by seasoned rural craftsmen across Bangladesh.",
   },
   {
-    icon: <Truck size={22} strokeWidth={1.7} />,
-    title: "Nationwide Delivery",
+    icon: <Truck size={22} strokeWidth={1.5} />,
+    title: "Nationwide Protected Shipping",
     description:
-      "Carefully packed and shipped across the country, with tracked delivery and careful handling for fragile pieces.",
+      "Wrapped thoroughly in conscious packaging and dispatched with reliable handling tiers optimized for fragile home goods.",
   },
   {
-    icon: <ShieldCheck size={22} strokeWidth={1.7} />,
+    icon: <ShieldCheck size={22} strokeWidth={1.5} />,
     title: "Built to Last, Guaranteed",
     description:
-      "Treated and food-safe finishes on every item, backed by a 6-month craftsmanship warranty.",
+      "Shielded with high-grade, food-safe finishes resisting regional humidity, supported by a 6-month structural warranty.",
   },
 ];
 
 export default function WhyChooseUs(): JSX.Element {
   return (
-    <section className="py-20 px-5 md:px-8" style={{ backgroundColor: "#FFFFFF", fontFamily: "'Inter', sans-serif" }}>
+    <section 
+      className="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" 
+      style={{ 
+        backgroundColor: "#FAF8F5", 
+        fontFamily: "'Inter', sans-serif" 
+      }}
+    >
+      {/* Background radial soft light blobs */}
+      <div 
+        className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none opacity-40 mix-blend-multiply"
+        style={{ background: `radial-gradient(circle, ${colors.cream} 0%, transparent 70%)` }}
+      />
+
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
-      `}</style>
-
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-xl mx-auto mb-14">
-          <span
-            className="text-[12px] font-semibold tracking-[0.15em] uppercase"
-            style={{ color: colors.moss }}
-          >
-            Why BambooCraft
-          </span>
-          <h2 className="brand-font text-3xl md:text-4xl mt-2 mb-4" style={{ color: colors.ink }}>
-            Rooted in craft, not shortcuts
-          </h2>
-          <p className="text-[14.5px] leading-relaxed" style={{ color: "rgba(42,42,34,0.6)" }}>
-            We work directly with rural artisan communities so the value of
-            every purchase goes back to the hands that made it.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reasons.map((reason, i) => (
-            <div
-              key={i}
-              className="group relative p-7 rounded-2xl border transition-all duration-300 hover:-translate-y-1.5"
-              style={{ borderColor: "rgba(31,61,43,0.08)", backgroundColor: colors.cream }}
-            >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors duration-300 group-hover:text-white"
-                style={{ backgroundColor: "rgba(31,61,43,0.08)", color: colors.forest }}
-              >
-                {reason.icon}
-              </div>
-              <h3 className="text-[15.5px] font-semibold mb-2" style={{ color: colors.ink }}>
-                {reason.title}
-              </h3>
-              <p className="text-[13px] leading-relaxed" style={{ color: "rgba(42,42,34,0.6)" }}>
-                {reason.description}
-              </p>
-
-              <span
-                className="brand-font absolute top-6 right-7 text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ color: colors.bambooTan }}
-              >
-                0{i + 1}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        .group:hover > div:first-child {
+        
+        .row-item {
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .row-item:hover {
+          transform: translateX(6px);
+        }
+        .icon-envelope {
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .row-item:hover .icon-envelope {
           background-color: ${colors.forest} !important;
+          color: ${colors.cream} !important;
+          transform: scale(1.05);
         }
       `}</style>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          
+          {/* Left Column: Human/Artisan Visual Content Frame */}
+          <div className="lg:col-span-5 relative h-[450px] md:h-[600px] w-full group rounded-2xl overflow-hidden shadow-xl">
+            <div className="absolute inset-0 bg-black/10 z-10 transition-opacity group-hover:opacity-0 duration-500" />
+            <Image
+              // Replace this path with your own artisan production workspace photo
+              src="/WhatsApp Image 2026-07-09 at 15.14.25.jpeg" 
+              alt="Artisans crafting woven bamboo furniture"
+              fill
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+            />
+            {/* Soft decorative accent badge */}
+            <div className="absolute bottom-6 left-6 right-6 p-6 backdrop-blur-md bg-[#1F3D2B]/95 rounded-xl z-20 transition-transform duration-500">
+              <p className="brand-font text-white text-lg font-medium mb-1">
+                Preserving Heritage Hands
+              </p>
+              <p className="text-[12.5px] text-white/70 leading-relaxed">
+                Every order ensures ethical income distribution across independent community clusters.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column: Value Propositions Grid */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            <div className="mb-12">
+              <span
+                className="text-[11px] font-bold tracking-[0.25em] uppercase block mb-3"
+                style={{ color: colors.moss }}
+              >
+                Honest Materials &middot; Timeless Process
+              </span>
+              <h2 className="brand-font text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight" style={{ color: colors.ink }}>
+                Rooted in craft, <span className="italic font-normal">not shortcuts</span>
+              </h2>
+            </div>
+
+            <div className="flex flex-col gap-8 md:gap-10">
+              {reasons.map((reason, i) => (
+                <div
+                  key={i}
+                  className="row-item group flex gap-5 items-start"
+                >
+                  <div
+                    className="icon-envelope w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: "rgba(31,61,43,0.06)", color: colors.forest }}
+                  >
+                    {reason.icon}
+                  </div>
+                  
+                  <div className="border-b pb-6 flex-1" style={{ borderColor: "rgba(31,61,43,0.08)" }}>
+                    <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: colors.ink }}>
+                      {reason.title}
+                    </h3>
+                    <p className="text-[13.5px] leading-relaxed font-normal max-w-xl" style={{ color: "rgba(42,42,34,0.65)" }}>
+                      {reason.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
   );
 }

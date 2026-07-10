@@ -1,5 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import { Star, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 const colors = {
   forest: "#1F3D2B",
@@ -28,18 +31,16 @@ const products: Product[] = [
     price: 1450,
     rating: 4.8,
     category: "Basket",
-    image:
-      "https://images.unsplash.com/photo-1587145717482-a5c5b9d5a1d3?q=80&w=800&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.04.06.jpeg",
   },
   {
     id: 2,
-    title: "Bamboo Lounge Chair",
+    title: "Bamboo Lounge Light",
     shortDescription: "Curved-frame chair with woven seat",
     price: 6200,
     rating: 4.9,
     category: "Furniture",
-    image:
-      "https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=800&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.14.36.jpeg",
   },
   {
     id: 3,
@@ -48,8 +49,7 @@ const products: Product[] = [
     price: 2100,
     rating: 4.7,
     category: "Lighting",
-    image:
-      "https://images.unsplash.com/photo-1543198126-42dd6c9ba5c9?q=80&w=800&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.14.37.jpeg",
   },
   {
     id: 4,
@@ -58,8 +58,7 @@ const products: Product[] = [
     price: 890,
     rating: 4.6,
     category: "Kitchenware",
-    image:
-      "https://images.unsplash.com/photo-1584990347449-716b6c9d4c31?q=80&w=800&auto=format&fit=crop",
+    image: "/WhatsApp Image 2026-07-09 at 15.14.24.jpeg",
   },
 ];
 
@@ -67,29 +66,31 @@ function ProductCard({ product }: { product: Product }): JSX.Element {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
-      <div className="relative aspect-[4/3] overflow-hidden" style={{ backgroundColor: "#EDE7D8" }}>
+    <div className="product-card group flex flex-col rounded-2xl overflow-hidden bg-white border border-black/5 p-3 transition-all duration-500 hover:shadow-2xl">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl" style={{ backgroundColor: "#EDE7D8" }}>
         {!loaded && (
           <div className="absolute inset-0 animate-pulse" style={{ backgroundColor: "#E3DCC8" }} />
         )}
-        <img
-          src={product.image}
-          alt={product.title}
+        <Image
+          src={product?.image}
+          alt={product?.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           onLoad={() => setLoaded(true)}
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+          className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
             loaded ? "opacity-100" : "opacity-0"
           }`}
         />
         <span
-          className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide uppercase"
-          style={{ backgroundColor: "rgba(31,61,43,0.9)", color: colors.bambooTan }}
+          className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase z-10 backdrop-blur-md transition-colors duration-300 group-hover:bg-white group-hover:text-black"
+          style={{ backgroundColor: "rgba(31,61,43,0.85)", color: colors.bambooTan }}
         >
           {product.category}
         </span>
       </div>
 
-      <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-[15.5px] font-semibold mb-1" style={{ color: colors.ink }}>
+      <div className="flex flex-col flex-1 pt-5 pb-2 px-2">
+        <h3 className="text-[16px] font-semibold mb-1 transition-colors duration-300 group-hover:text-[#1F3D2B]" style={{ color: colors.ink }}>
           {product.title}
         </h3>
         <p className="text-[13px] mb-4 leading-relaxed" style={{ color: "rgba(42,42,34,0.6)" }}>
@@ -97,27 +98,27 @@ function ProductCard({ product }: { product: Product }): JSX.Element {
         </p>
 
         <div className="mt-auto flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Star size={13} fill={colors.ochre} color={colors.ochre} />
-            <span className="text-[12.5px] font-medium" style={{ color: colors.ink }}>
+          <div className="flex items-center gap-1 bg-neutral-100 px-2 py-0.5 rounded-md">
+            <Star size={12} fill={colors.ochre} color={colors.ochre} />
+            <span className="text-[12px] font-bold" style={{ color: colors.ink }}>
               {product.rating}
             </span>
           </div>
-          <span className="text-[15px] font-bold" style={{ color: colors.forest }}>
+          <span className="text-[16px] font-bold" style={{ color: colors.forest }}>
             &#2547;{product.price.toLocaleString()}
           </span>
         </div>
 
         <a
           href="#"
-          className="mt-4 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[13px] font-semibold border transition-colors group-hover:text-white"
+          className="product-view-btn mt-5 flex items-center justify-center gap-1.5 py-3 rounded-full text-[13px] font-semibold border"
           style={{
             borderColor: colors.forest,
             color: colors.forest,
           }}
         >
           View Details
-          <ArrowUpRight size={14} strokeWidth={2} />
+          <ArrowUpRight size={14} className="btn-arrow transition-transform duration-300" strokeWidth={2} />
         </a>
       </div>
     </div>
@@ -126,47 +127,59 @@ function ProductCard({ product }: { product: Product }): JSX.Element {
 
 export default function FeaturedProducts(): JSX.Element {
   return (
-    <section className="py-20 px-5 md:px-8" style={{ backgroundColor: colors.cream, fontFamily: "'Inter', sans-serif" }}>
+    <section className="py-24 px-5 md:px-8" style={{ backgroundColor: colors.cream, fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
+        
+        .product-card {
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-card:hover {
+          transform: translateY(-8px);
+          border-color: rgba(31,61,43,0.15);
+        }
+        .product-view-btn {
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .product-view-btn {
+          background-color: ${colors.forest};
+          color: #FFFFFF !important;
+        }
+        .group:hover .btn-arrow {
+          transform: translate(2px, -2px);
+        }
       `}</style>
 
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-4">
           <div>
             <span
-              className="text-[12px] font-semibold tracking-[0.15em] uppercase"
+              className="text-[12px] font-semibold tracking-[0.2em] uppercase"
               style={{ color: colors.moss }}
             >
               Curated Selection
             </span>
-            <h2 className="brand-font text-3xl md:text-4xl mt-2" style={{ color: colors.ink }}>
+            <h2 className="brand-font text-3xl md:text-4xl lg:text-5xl mt-2" style={{ color: colors.ink }}>
               Featured Products
             </h2>
           </div>
           <a
             href="#"
-            className="text-[13.5px] font-semibold flex items-center gap-1.5 self-start md:self-auto"
+            className="group/link text-[14px] font-semibold flex items-center gap-1.5 self-start md:self-auto transition-opacity hover:opacity-80"
             style={{ color: colors.forest }}
           >
             View all products
-            <ArrowUpRight size={15} strokeWidth={2} />
+            <ArrowUpRight size={16} strokeWidth={2} className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
       </div>
-
-      <style>{`
-        .group:hover a[href="#"].mt-4 {
-          background-color: ${colors.forest};
-        }
-      `}</style>
     </section>
   );
 }

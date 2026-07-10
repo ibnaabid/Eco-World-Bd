@@ -25,8 +25,7 @@ const bestSellers: BestSeller[] = [
     category: "Basket",
     price: 1450,
     unitsSold: 1204,
-    image:
-      "https://images.unsplash.com/photo-1587145717482-a5c5b9d5a1d3?q=80&w=800&auto=format&fit=crop",
+    image:"/WhatsApp Image 2026-07-09 at 15.14.23.jpeg"
   },
   {
     rank: "02",
@@ -34,8 +33,7 @@ const bestSellers: BestSeller[] = [
     category: "Furniture",
     price: 2800,
     unitsSold: 968,
-    image:
-      "https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop",
+    image:"/WhatsApp Image 2026-07-09 at 15.04.05.jpeg"
   },
   {
     rank: "03",
@@ -43,8 +41,7 @@ const bestSellers: BestSeller[] = [
     category: "Lighting",
     price: 2100,
     unitsSold: 845,
-    image:
-      "https://images.unsplash.com/photo-1543198126-42dd6c9ba5c9?q=80&w=800&auto=format&fit=crop",
+    image:"/WhatsApp Image 2026-07-09 at 15.14.37.jpeg"
   },
 ];
 
