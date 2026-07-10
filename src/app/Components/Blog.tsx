@@ -91,7 +91,7 @@ export default function BlogSection(): JSX.Element {
               className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
-                <img
+                <Image
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
