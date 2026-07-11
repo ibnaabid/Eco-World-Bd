@@ -68,6 +68,7 @@ const Page = async () => {
                   <thead className="bg-emerald-700 text-white">
                     <tr>
                       <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider">Product</th>
+                             <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider">Adress</th>
                       <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
                       <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider">Price</th>
                       <th className="px-5 py-3.5 text-center text-xs font-semibold uppercase tracking-wider">Actions</th>
@@ -95,6 +96,12 @@ const Page = async () => {
                               {product.productName}
                             </span>
                           </div>
+                        </td>
+
+                         <td className="px-5 py-4">
+                          <span className="inline-block text-xs font-medium bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">
+                            {product.pickupAddress || "—"}
+                          </span>
                         </td>
 
                         <td className="px-5 py-4">
