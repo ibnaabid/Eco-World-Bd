@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Plus, Image as ImageIcon, Trash2, ShoppingBag, Tag, Sparkles } from "lucide-react";
+import { Plus, Image as ImageIcon, Trash2, ShoppingBag, MapPin, Truck } from "lucide-react";
+import toast from "react-hot-toast";
 
 const colors = {
   cardDark: "#132519",
   bambooTan: "#C9A876",
-  moss: "#6B8F5C",
   cream: "#F6F2E9"
 };
 
@@ -15,9 +15,12 @@ export default function AddProduct() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [pickupAddress, setPickupAddress] = useState("");
+  const [parcelType, setParcelType] = useState("standard");
+  const [loading, setLoading] = useState(false); // লোডিং স্টেট
+
   const fileInputRef = useRef(null);
 
-  // পিসির ফোল্ডার ওপেন করে ইমেজ ফাইল ইনপুট নেওয়ার ফাংশন
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -27,11 +30,7 @@ export default function AddProduct() {
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  // ড্র্যাগ অ্যান্ড ড্রপ ফাইল ইনপুট
+  const handleDragOver = (e) => e.preventDefault();
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
@@ -44,20 +43,55 @@ export default function AddProduct() {
 
   const removeImage = () => {
     setImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const triggerFileSelect = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleSubmit = (e) => {
+  // 🚀 সরাসরি ডিরেক্ট API কল এখানে (No External Function)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // এখানে তোমার API কল করে ডেটাবেজে পাঠাতে পারবে মামা
-    console.log({ productName, price, description, image });
-    alert("Product added successfully!");
+    setLoading(true);
+
+    // সাবমিট করার অবজেক্ট
+    const bodyData = {
+      productName,
+      price: Number(price), // নাম্বার ফরম্যাটে কনভার্ট
+      description,
+      pickupAddress,
+      parcelType,
+      image: image ? image.preview : null // ইমেজ ইউআরএল বা প্রিভিউ
+    };
+
+    try {
+      // সরাসরি ডিরেক্ট fetch কল
+      const res = await fetch("http://localhost:5000/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bodyData)
+      });
+
+      if (!res.ok) {
+        throw new Error("Something went wrong with the API!");
+      }
+
+      const result = await res.json();
+      console.log("Success from DB:", result);
+      toast.success("Product added directly to database successfully!");
+      
+      // ফর্ম রিসেট
+      setProductName("");
+      setPrice("");
+      setDescription("");
+      setPickupAddress("");
+      setImage(null);
+
+    } catch (error) {
+      console.error("Direct API Error:", error);
+      alert("Failed to add product. Check if backend server is running!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,11 +108,9 @@ export default function AddProduct() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5 text-sm">
-          {/* ১. ইমেজ আপলোডার এরিয়া (পিসির ফোল্ডার খোলার ব্যবস্থা) */}
+          {/* ইমেজ আপলোডার এরিয়া */}
           <div>
             <label className="block text-white/60 font-medium mb-2">Product Showcase Image</label>
-            
-            {/* ইনপুট ফিল্ডটি হাইড করে বাটন বা ড্র্যাগ বক্স দিয়ে ক্লিক ট্রিগার করা হয়েছে */}
             <input 
               type="file" 
               ref={fileInputRef}
@@ -91,28 +123,17 @@ export default function AddProduct() {
               <div 
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                onClick={triggerFileSelect}
+                onClick={() => fileInputRef.current.click()}
                 className="border-2 border-dashed border-white/10 hover:border-[#C9A876]/40 rounded-2xl p-8 text-center cursor-pointer transition-all bg-black/10 flex flex-col items-center justify-center gap-3 group"
               >
                 <div className="p-4 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
                   <ImageIcon size={32} style={{ color: colors.bambooTan }} />
                 </div>
-                <div>
-                  <p className="text-white/80 font-medium text-[13.5px]">
-                    Click to browse or drag & drop image
-                  </p>
-                  <p className="text-[11px] text-white/30 mt-1">
-                    Supports PNG, JPG, WEBP (Max 5MB)
-                  </p>
-                </div>
+                <p className="text-white/80 font-medium text-[13.5px]">Click to browse image</p>
               </div>
             ) : (
               <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black/20 p-2 flex items-center justify-center">
-                <img 
-                  src={image.preview} 
-                  alt="preview" 
-                  className="max-h-64 object-contain rounded-xl"
-                />
+                <img src={image.preview} alt="preview" className="max-h-64 object-contain rounded-xl" />
                 <button
                   type="button"
                   onClick={removeImage}
@@ -124,7 +145,7 @@ export default function AddProduct() {
             )}
           </div>
 
-          {/* ২. প্রোডাক্টের নাম */}
+          {/* প্রোডাক্টের নাম ও প্রাইস */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-white/60 font-medium mb-1.5">Product Title</label>
@@ -138,7 +159,6 @@ export default function AddProduct() {
               />
             </div>
 
-            {/* ৩. প্রোডাক্টের প্রাইস */}
             <div>
               <label className="block text-white/60 font-medium mb-1.5">Price (BDT)</label>
               <input 
@@ -152,27 +172,58 @@ export default function AddProduct() {
             </div>
           </div>
 
-          {/* ৪. ডেসক্রিপশন */}
-          <div>
+          {/* Logistics সেকশন */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-white/5 pt-4">
+            <div>
+              <label className="text-white/60 font-medium mb-1.5 flex items-center gap-1.5">
+                <MapPin size={15} style={{ color: colors.bambooTan }} /> Warehouse / Pickup Address
+              </label>
+              <input 
+                type="text" 
+                value={pickupAddress}
+                onChange={(e) => setPickupAddress(e.target.value)}
+                placeholder="e.g., Mirpur-10, Dhaka" 
+                required
+                className="w-full bg-black/10 border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-3 text-white placeholder-white/20 outline-none transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="text-white/60 font-medium mb-1.5 flex items-center gap-1.5">
+                <Truck size={15} style={{ color: colors.bambooTan }} /> Parcel Delivery Type
+              </label>
+              <select
+                value={parcelType}
+                onChange={(e) => setParcelType(e.target.value)}
+                className="w-full bg-[#132519] border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-3 text-white outline-none transition-all cursor-pointer"
+              >
+                <option value="standard">Standard Parcel (3-5 Days)</option>
+                <option value="express">Express Courier (Next Day)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* ডেসক্রিপশন */}
+          <div className="border-t border-white/5 pt-2">
             <label className="block text-white/60 font-medium mb-1.5">Description</label>
             <textarea 
               rows="4"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell customers about the materials, design history, and size of this handicraft..." 
+              placeholder="Tell customers about the materials..." 
               required
               className="w-full bg-black/10 border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-3 text-white placeholder-white/20 outline-none transition-all resize-none"
             />
           </div>
 
-          {/* সাবমিট বাটন */}
+          {/* সাবমিট বাটন (লোডিং স্টেট সহ) */}
           <button 
             type="submit"
-            className="w-full py-3.5 mt-2 rounded-xl text-black font-semibold text-[14px] flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition-all"
+            disabled={loading}
+            className="w-full py-3.5 mt-2 rounded-xl text-black font-semibold text-[14px] flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition-all disabled:opacity-50"
             style={{ backgroundColor: colors.bambooTan }}
           >
-            <Plus size={16} />
-            Publish Product
+            {loading ? "Publishing to API..." : <><Plus size={16} /> Publish Product</>}
           </button>
         </form>
       </div>

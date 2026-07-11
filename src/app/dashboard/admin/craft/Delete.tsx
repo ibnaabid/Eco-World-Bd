@@ -1,0 +1,85 @@
+"use client";
+
+import { AlertDialog, Button } from "@heroui/react";
+import { Trash2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+
+interface Product {
+  _id: string;
+  productName: string;
+}
+
+interface DeleteProductDialogProps {
+  product: Product;
+}
+
+export default function DeleteProductDialog({
+  product,
+}: DeleteProductDialogProps) {
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/products/${product._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.deletedCount > 0) {
+        toast.success("Product deleted successfully!");
+
+        // page refresh
+        window.location.reload();
+      } else {
+        toast.error("Failed to delete product");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!");
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <Button className="bg-red-600" variant="flat">
+        <Trash2 size={18} />
+        Delete
+      </Button>
+
+      <AlertDialog.Backdrop>
+        <AlertDialog.Container>
+          <AlertDialog.Dialog className="sm:max-w-md">
+            <AlertDialog.CloseTrigger />
+
+            <AlertDialog.Header>
+              <AlertDialog.Icon status="danger" />
+              <AlertDialog.Heading>
+                Delete Product?
+              </AlertDialog.Heading>
+            </AlertDialog.Header>
+
+            <AlertDialog.Body>
+              Are you sure you want to delete{" "}
+              <strong>{product.productName}</strong>?
+            </AlertDialog.Body>
+
+            <AlertDialog.Footer>
+              <Button slot="close" variant="flat">
+                Cancel
+              </Button>
+
+              <Button
+                color="danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </AlertDialog.Footer>
+          </AlertDialog.Dialog>
+        </AlertDialog.Container>
+      </AlertDialog.Backdrop>
+    </AlertDialog>
+  );
+}
