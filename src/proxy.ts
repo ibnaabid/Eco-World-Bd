@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
   const user = session?.user;
   const { pathname } = request.nextUrl;
 
-  // Not logged in
+  // Login না থাকলে
   if (!user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -21,17 +21,15 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/dashboard/admin") &&
     user.email !== ADMIN_EMAIL
   ) {
-    return NextResponse.redirect(new URL("/dashboard/customer", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
-
-
 
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/dashboard/admin/",
-    "/dashboard/customer/",
+    "/dashboard/admin/:path*",
+    "/dashboard/customer/:path*",
   ],
 };

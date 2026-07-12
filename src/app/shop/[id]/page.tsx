@@ -9,8 +9,7 @@ import {
   Leaf,
   Star,
 } from "lucide-react";
-
-
+import WhatsAppButton from "@/app/Whatsapp/page";
 
 interface Product {
   _id: string;
@@ -52,13 +51,9 @@ const Page = async ({ params }: PageProps) => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
           {/* IMAGE */}
-
           <div className="relative group">
-
             <div className="absolute -inset-3 rounded-[35px] bg-gradient-to-r from-emerald-200 via-amber-100 to-emerald-100 blur-2xl opacity-70"></div>
-
             <div className="relative overflow-hidden rounded-[32px] bg-white shadow-2xl border border-white">
-
               <Image
                 src={product.image}
                 alt={product.productName}
@@ -66,19 +61,14 @@ const Page = async ({ params }: PageProps) => {
                 height={900}
                 className="w-full h-[550px] object-cover transition duration-700 group-hover:scale-105"
               />
-
               <span className="absolute left-6 top-6 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-xs font-semibold shadow">
                 {product.parcelType}
               </span>
-
             </div>
-
           </div>
 
           {/* CONTENT */}
-
           <div>
-
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold">
               <Leaf size={15} />
               Eco Friendly Product
@@ -89,7 +79,6 @@ const Page = async ({ params }: PageProps) => {
             </h1>
 
             <div className="flex items-center gap-2 mt-5">
-
               <div className="flex text-yellow-500">
                 <Star fill="currentColor" size={18} />
                 <Star fill="currentColor" size={18} />
@@ -97,11 +86,7 @@ const Page = async ({ params }: PageProps) => {
                 <Star fill="currentColor" size={18} />
                 <Star fill="currentColor" size={18} />
               </div>
-
-              <span className="text-gray-500">
-                4.9 (250 Reviews)
-              </span>
-
+              <span className="text-gray-500">4.9 (250 Reviews)</span>
             </div>
 
             <h2 className="mt-8 text-6xl font-black text-emerald-700">
@@ -113,88 +98,46 @@ const Page = async ({ params }: PageProps) => {
             </p>
 
             <div className="mt-10 space-y-5">
-
               <div className="flex items-center gap-4 p-5 rounded-2xl bg-white shadow">
-
                 <MapPin className="text-emerald-700" />
-
                 <div>
-
-                  <p className="text-xs uppercase text-gray-400">
-                    Pickup Location
-                  </p>
-
-                  <h4 className="font-semibold">
-                    {product.pickupAddress}
-                  </h4>
-
+                  <p className="text-xs uppercase text-gray-400">Pickup Location</p>
+                  <h4 className="font-semibold">{product.pickupAddress}</h4>
                 </div>
-
               </div>
 
               <div className="flex items-center gap-4 p-5 rounded-2xl bg-white shadow">
-
                 <Truck className="text-emerald-700" />
-
                 <div>
-
-                  <p className="text-xs uppercase text-gray-400">
-                    Delivery
-                  </p>
-
-                  <h4 className="font-semibold">
-                    {product.parcelType}
-                  </h4>
-
+                  <p className="text-xs uppercase text-gray-400">Delivery</p>
+                  <h4 className="font-semibold">{product.parcelType}</h4>
                 </div>
-
               </div>
 
               <div className="flex items-center gap-4 p-5 rounded-2xl bg-white shadow">
-
                 <ShieldCheck className="text-emerald-700" />
-
                 <div>
-
-                  <p className="text-xs uppercase text-gray-400">
-                    Warranty
-                  </p>
-
-                  <h4 className="font-semibold">
-                    100% Authentic Handmade
-                  </h4>
-
+                  <p className="text-xs uppercase text-gray-400">Warranty</p>
+                  <h4 className="font-semibold">100% Authentic Handmade</h4>
                 </div>
-
               </div>
-
             </div>
 
+            {/* BUTTON ACTIONS */}
             <div className="flex gap-4 mt-10">
-
               <button className="flex-1 h-14 rounded-2xl bg-[#16301F] hover:bg-[#21432d] transition text-white font-semibold flex items-center justify-center gap-3 shadow-xl">
-
                 <ShoppingBag size={20} />
-
                 Add To Cart
-
               </button>
 
-             
-
-               <button className="h-14 px-8 rounded-2xl border-2 border-emerald-700 text-emerald-700 font-semibold hover:bg-emerald-700 hover:text-white transition">
-
-               
-                Contact in WhatsApp
-
-              </button>
-
+              {/* 🎯 ফিক্সড: বাটন ট্যাগ সরিয়ে সরাসরি কম্পোনেন্ট রাখা হয়েছে এবং প্রপ্স ঠিক করা হয়েছে */}
+              <div className="flex-1 h-14">
+                <WhatsAppButton product={product} />
+              </div>
             </div>
 
           </div>
-
         </div>
-
       </div>
     </section>
   );

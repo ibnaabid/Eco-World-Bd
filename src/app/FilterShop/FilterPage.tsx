@@ -32,7 +32,7 @@ export default function ProductFilter({
   setSort,
 }: ProductFilterProps) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-12">
+    <div className="bg-gray-100/30 rounded-2xl border border-gray-200 shadow-sm p-6 mb-12">
       <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-5">
 
         {/* Search Product */}
