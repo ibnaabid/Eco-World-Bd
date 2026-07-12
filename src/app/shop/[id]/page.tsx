@@ -10,6 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import WhatsAppButton from "@/app/Whatsapp/page";
+import CartContent from "./BuyBtn";
 
 interface Product {
   _id: string;
@@ -125,13 +126,11 @@ const Page = async ({ params }: PageProps) => {
 
             {/* BUTTON ACTIONS */}
             <div className="flex gap-4 mt-10">
-              <button className="flex-1 h-14 rounded-2xl bg-[#16301F] hover:bg-[#21432d] transition text-white font-semibold flex items-center justify-center gap-3 shadow-xl">
-                <ShoppingBag size={20} />
-                Add To Cart
-              </button>
+            
+            <CartContent product={product} />
 
               {/* 🎯 ফিক্সড: বাটন ট্যাগ সরিয়ে সরাসরি কম্পোনেন্ট রাখা হয়েছে এবং প্রপ্স ঠিক করা হয়েছে */}
-              <div className="flex-1 h-14">
+              <div className="flex h-16">
                 <WhatsAppButton product={product} />
               </div>
             </div>
