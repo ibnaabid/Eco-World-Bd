@@ -36,7 +36,7 @@ export default function MyOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/my-orders?email=${userEmail}`);
+      const res = await fetch(`http://localhost:5000/orders?email=${userEmail}`);
       const data = await res.json();
       setOrders(data);
     } catch (err) {
@@ -91,8 +91,8 @@ export default function MyOrdersPage() {
             <p className="text-xl text-gray-600">No orders yet</p>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <table className="w-full">
+          <div className="bg-[#16301F] rounded-3xl shadow-xl overflow-hidden">
+            <table className="w-full text-white">
               <thead className="bg-gradient-to-r from-emerald-700 to-teal-700 text-white sticky top-0">
                 <tr>
                   <th className="py-6 px-8 text-left">Order ID</th>
