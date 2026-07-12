@@ -37,8 +37,8 @@ export default function LoginPage(): JSX.Element {
 
   const validate = () => {
     const next: typeof errors = {};
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = "Enter a valid email address";
-    if (form.password.length < 6) next.password = "Password must be at least 6 characters";
+    if (!form.email || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = "Enter a valid email address";
+    if (!form.password || form.password.length < 6) next.password = "Password must be at least 6 characters";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -50,6 +50,7 @@ export default function LoginPage(): JSX.Element {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
+    setErrors({});
 
     try {
       const { error } = await authClient.signIn.email({
@@ -57,30 +58,33 @@ export default function LoginPage(): JSX.Element {
         password: form.password,
       });
 
+      // 🎯 Fixed: console.log-এ form.email এবং form.password ব্যবহার করা হয়েছে
+      console.log(form.email, form.password);
+
       if (error) {
         setErrors({ general: error.message || "Invalid email or password" });
-        setLoading(false);
         return;
       }
 
       toast.success("Login successful");
 
-      // 🎯 Fixed: Checked matching strings from form runtime object keys natively
       if (
         form?.email === "mdmosabbirrahman07@gmail.com" &&
         form?.password === "123456789"
       ) {
         router.push("/dashboard/admin");
       } else {
-        router.push("/customer/dashboard");
+        router.push("/dashboard/customer");
       }
-    } catch (err) {
-      setErrors({ general: "Something went wrong. Please try again." });
+    } catch (err: any) {
+      setErrors({ general: err?.message || "Something went wrong. Please try again." });
+    } {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault(); // ফর্মের ভেতরে যেন অনাকাঙ্ক্ষিত সাবমিট না হয়
     setGoogleLoading(true);
     try {
       await authClient.signIn.social({

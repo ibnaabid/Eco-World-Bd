@@ -38,7 +38,7 @@ const loggedOutLinks: NavLink[] = [
 const loggedInLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
-  { label: "Dashboard", href: "/dashboard" },
+  { label: "Dashboard", href: "/dashboard/customer" },
   { label: "My Orders", href: "/orders" },
   { label: "Wishlist", href: "/wishlist" },
   { label: "Blog", href: "/blog" },

@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authClient } from "../lib/auth-client";
 import toast from "react-hot-toast";
-// import { authClient } from "@/lib/auth-client"; 
 
 const colors = {
   forest: "#16301F",
@@ -30,6 +29,7 @@ const fadeUp = {
 
 function getStrength(password: string): { label: string; score: number; color: string } {
   let score = 0;
+  if (!password) return { label: "Weak", score: 0, color: "#D9534F" };
   if (password.length >= 6) score++;
   if (password.length >= 10) score++;
   if (/[A-Z]/.test(password)) score++;
@@ -49,13 +49,13 @@ export default function RegisterPage(): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   
-  const strength = getStrength(form.password);
+  const strength = getStrength(form.password || "");
 
   const validate = () => {
     const next: typeof errors = {};
-    if (form.name.trim().length < 2) next.name = "Enter your full name";
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = "Enter a valid email address";
-    if (form.password.length < 6) next.password = "Password must be at least 6 characters";
+    if (!form.name || form.name.trim().length < 2) next.name = "Enter your full name";
+    if (!form.email || !/^\S+@\S+\.\S+$/.test(form.email)) next.email = "Enter a valid email address";
+    if (!form.password || form.password.length < 6) next.password = "Password must be at least 6 characters";
     if (!form.agree) next.agree = "You must accept the terms to continue";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -65,34 +65,40 @@ export default function RegisterPage(): JSX.Element {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
+    setErrors({});
 
     try {
-      const { error } = await authClient.signUp.email({
+      const { data, error } = await authClient.signUp.email({
         name: form.name,
         email: form.email,
         password: form.password,
-      });
+      }
+      
+    );
+    
+      console.log(data)
 
       if (error) {
         setErrors({ general: error.message || "Failed to create account" });
-        setLoading(false);
         return;
       }
 
-      toast.success("SignUp successfully Done!....")
+      toast.success("SignUp successfully Done!....");
       router.push("/login"); 
-    } catch (err) {
-      setErrors({ general: "Something went wrong. Please try again." });
+    } catch (err: any) {
+      setErrors({ general: err?.message || "Something went wrong. Please try again." });
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault(); // ফর্ম সাবমিট হওয়া প্রতিরোধ করতে
     setGoogleLoading(true);
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard", // গুগল সাইন আপের পর সরাসরি ড্যাশবোর্ড বা হোমে রিডাইরেক্ট
+        callbackURL: "/dashboard",
       });
     } catch (err) {
       console.error("Google sign-in failed", err);
@@ -215,7 +221,7 @@ export default function RegisterPage(): JSX.Element {
                 </button>
               </div>
 
-              {form.password.length > 0 && (
+              {form.password && form.password.length > 0 && (
                 <div className="mt-2">
                   <div className="w-full h-1 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(0,0,0,0.08)" }}>
                     <div className="strength-bar h-full rounded-full" style={{ width: `${(strength.score / 3) * 100}%`, backgroundColor: strength.color }} />
@@ -226,15 +232,25 @@ export default function RegisterPage(): JSX.Element {
               {errors.password && <p className="text-[11.5px] mt-1" style={{ color: "#D9534F" }}>{errors.password}</p>}
             </motion.div>
 
-            <motion.label variants={fadeUp} custom={4} initial="hidden" animate="show" className="flex items-start gap-2.5 cursor-pointer mt-1">
-              <div onClick={() => setForm({ ...form, agree: !form.agree })} className="custom-checkbox rounded-md border flex items-center justify-center shrink-0 mt-0.5" style={{ width: 18, height: 18, backgroundColor: form.agree ? colors.forest : "transparent", borderColor: form.agree ? colors.forest : "rgba(0,0,0,0.25)" }}>
-                {form.agree && <Check size={12} color="#fff" strokeWidth={3} />}
-              </div>
-              <span className="text-[12.5px] leading-snug" style={{ color: "rgba(33,31,22,0.65)" }}>
-                I agree to the <a href="/terms" className="font-semibold" style={{ color: colors.forest }}>Terms of Service</a> and <a href="/privacy" className="font-semibold" style={{ color: colors.forest }}>Privacy Policy</a>
-              </span>
-            </motion.label>
-            {errors.agree && <p className="text-[11.5px] -mt-2" style={{ color: "#D9534F" }}>{errors.agree}</p>}
+            {/* Checkbox Fixed: label-এর ওপর htmlFor দিয়ে ইনপুট কন্ট্রোল করা হয়েছে */}
+            <motion.div variants={fadeUp} custom={4} initial="hidden" animate="show" className="flex items-start gap-2.5 mt-1">
+              <input
+                type="checkbox"
+                id="agree-checkbox"
+                checked={form.agree}
+                onChange={(e) => setForm(prev => ({ ...prev, agree: e.target.checked }))}
+                className="sr-only"
+              />
+              <label htmlFor="agree-checkbox" className="flex items-start gap-2.5 cursor-pointer">
+                <div className="custom-checkbox rounded-md border flex items-center justify-center shrink-0 mt-0.5" style={{ width: 18, height: 18, backgroundColor: form.agree ? colors.forest : "transparent", borderColor: form.agree ? colors.forest : "rgba(0,0,0,0.25)" }}>
+                  {form.agree && <Check size={12} color="#fff" strokeWidth={3} />}
+                </div>
+                <span className="text-[12.5px] leading-snug" style={{ color: "rgba(33,31,22,0.65)" }}>
+                  I agree to the <a href="/terms" className="font-semibold" style={{ color: colors.forest }}>Terms of Service</a> and <a href="/privacy" className="font-semibold" style={{ color: colors.forest }}>Privacy Policy</a>
+                </span>
+              </label>
+            </motion.div>
+            {errors.agree && <p className="text-[11.5px] mt-1" style={{ color: "#D9534F" }}>{errors.agree}</p>}
 
             <motion.button variants={fadeUp} custom={5} initial="hidden" animate="show" type="submit" whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} disabled={loading} className="flex items-center justify-center gap-2 py-3.5 rounded-xl text-[14px] font-semibold mt-1" style={{ backgroundColor: colors.ochre, color: colors.cream, opacity: loading ? 0.7 : 1 }}>
               {loading ? "Creating account..." : "Create account"}

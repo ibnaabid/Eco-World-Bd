@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { authClient } from "../lib/auth-client";
+import { authClient } from "../../lib/auth-client";
 
 // লাক্সারি থিম কালার প্যালেট
 const colors = {

@@ -1,146 +1,186 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { MapPin, Truck, Layers, RefreshCw } from 'lucide-react';
-import Image from 'next/image';
+"use client";
 
-export interface Product {
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ShoppingBag, Eye, Heart, MapPin, Truck, Sparkles, Loader2 } from "lucide-react";
+import Image from "next/image";
+
+// থিম কালার গাইডলাইন
+const colors = {
+  forest: "#16301F",
+  moss: "#7FA36A",
+  bambooTan: "#D4B483",
+  cream: "#FAF7F0",
+  ink: "#211F16",
+};
+
+// আপনার পাঠানো এক্সাক্ট ডেটা ইন্টারফেস
+interface Product {
   _id: string;
   productName: string;
   price: number;
   description: string;
   pickupAddress: string;
-  parcelType: 'standard' | 'express' | string;
+  parcelType: string;
   image: string;
 }
 
-const ProductGrid: React.FC = () => {
+export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // ==========================================
-  // CORE DISPATCH: Fetch API Engine
-  // ==========================================
+  // ১. সরাসরি ডেটা ফেচিং লজিক
   useEffect(() => {
-    const fetchInventoryData = async () => {
+    const getProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/products');
-        if (!response.ok) throw new Error('System failed to retrieve products stream.');
-        const data: Product[] = await response.json();
+        const res = await fetch("http://localhost:5000/products", {
+          cache: "no-store" // লেটেস্ট ডেটা পাওয়ার জন্য
+        });
+        if (!res.ok) throw new Error("ডেটা লোড করতে ব্যর্থ হয়েছে!");
+        const data = await res.json();
         setProducts(data);
-        setLoading(false);
       } catch (err: any) {
-        setError(err.message || 'Fatal endpoint response exception.');
+        setError(err.message || "সার্ভারে কানেক্ট হতে পারছে না!");
+      } finally {
         setLoading(false);
       }
     };
-    fetchInventoryData();
+
+    getProducts();
   }, []);
 
-  if (loading) return (
-    <div className="flex flex-col justify-center items-center h-96 gap-3">
-      <RefreshCw size={24} className="animate-spin text-gray-500" />
-      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Streaming DB...</span>
-    </div>
-  );
+  // প্রিমিয়াম ফলব্যাক ইমেজ (যদি blob ইমেজ লোড না হয়)
+  const fallbackImage = "https://images.unsplash.com/photo-1616627561950-9f746e330187?q=80&w=600&auto=format&fit=crop";
 
-  if (error) return (
-    <div className="text-center py-16 text-rose-500 font-semibold text-sm bg-rose-50/40 border border-rose-100 rounded-2xl max-w-md mx-auto">
-      Error Pipe: {error}
-    </div>
-  );
+  // ২. লোডিং স্টেট ডিজাইন
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-[#FAF7F0]/30">
+        <Loader2 className="animate-spin text-[#16301F]" size={40} />
+        <p className="text-sm font-medium tracking-wide" style={{ color: colors.forest }}>
+          প্রিমিয়াম কালেকশন লোড হচ্ছে...
+        </p>
+      </div>
+    );
+  }
 
+  // ৩. এরর স্টেট ডিজাইন
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F0]/30">
+        <div className="text-center p-6 bg-white rounded-2xl shadow-sm border border-red-100 max-w-sm">
+          <p className="text-red-500 font-semibold mb-2">Error Occurred</p>
+          <p className="text-xs text-gray-500 mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="px-4 py-2 text-xs text-white rounded-lg font-medium" style={{ backgroundColor: colors.forest }}>
+            আবার চেষ্টা করুন
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ৪. মেইন রেন্ডারিং (গ্রিড ও কার্ড)
   return (
-    <div className="w-full bg-slate-50/30 min-h-screen py-12 px-4 sm:px-6 lg:px-8 antialiased">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#FAF7F0]/40 py-16 px-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="max-w-7xl mx-auto">
         
-        {/* Dynamic Micro Info Header */}
-        <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-5">
-          <div>
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Active Inventory</h2>
-            <p className="text-xs text-slate-400 font-medium">Dynamic Live Fetch Grid</p>
+        {/* হেডার সেকশন */}
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white border border-amber-200/40 rounded-full mb-4 text-[12px] font-semibold text-[#C9922F] shadow-xs">
+            <Sparkles size={13} /> 100% Authentic Handcrafts
           </div>
-          <span className="inline-flex items-center gap-1.5 bg-slate-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm">
-            <Layers size={12} /> {products.length} Units Available
-          </span>
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#211F16] mb-3 font-serif">
+            The BambooCraft Collection
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+            বগুড়া ও দিনাজপুরের প্রত্যন্ত অঞ্চলের দক্ষ কারিগরদের হাতে তৈরি প্রিমিয়াম ট্র্যাডিশনাল প্রোডাক্টস।
+          </p>
         </div>
 
-        {/* ==========================================
-            🎨 ULTRA-PREMIUM GRID CARDS MODULE
-           ========================================== */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* প্রোডাক্ট গ্রিড */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 xl:gap-8">
           {products.map((product) => (
-            <div 
+            <motion.div
               key={product._id}
-              className="group relative bg-green-900 rounded-3xl border border-slate-100/80 shadow-[0_4px_30px_rgba(0,0,0,0.01)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.06)] hover:border-slate-200/50 transition-all duration-500 ease-out flex flex-col overflow-hidden"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35 }}
+              className="group relative bg-gray-700 rounded-2xl overflow-hidden border border-gray-100 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col h-full"
             >
-              {/* Asset Frame Showcase wrapper */}
-              <div className="p-3 pb-0">
-                <div className="w-full h-52 bg-slate-50/50 rounded-2xl overflow-hidden relative border border-slate-100/60">
-                  <Image
-                  height={600}
-                  width={600}
-                    src={product.image} 
-                    alt={product.productName} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    onError={(e)=>{(e.target as HTMLImageElement).src='https://placehold.co/600x400?text=Asset+Missing'}}
-                  />
-                  
-                  {/* Floating Routing Tier Badge */}
-                  <div className="absolute top-3 left-3">
-                    <span className={`inline-flex items-center gap-1 text-[10px] font-extrabold px-3 py-1 rounded-xl uppercase tracking-wide border backdrop-blur-md shadow-sm ${
-                      product.parcelType === 'express' 
-                        ? 'bg-amber-50/90 text-amber-800 border-amber-200/40' 
-                        : 'bg-white/90 text-slate-300 border-slate-200/40'
-                    }`}>
-                      <Truck size={10} className={product.parcelType === 'express' ? 'text-amber-600' : 'text-slate-400'} />
-                      {product.parcelType}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Data Specifications Content Area */}
-              <div className="px-5 pt-4 pb-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <h3 className="text-base font-bold text-slate-800 tracking-tight group-hover:text-indigo-600 transition-colors duration-300 leading-snug line-clamp-1">
-                      {product.productName}
-                    </h3>
-                    
-                    {/* Clean Pill Price Asset */}
-                    <div className="font-black text-slate-900 bg-slate-50 border border-slate-100 px-2.5 py-0.5 rounded-lg text-sm tracking-tight">
-                      ${product.price}
-                    </div>
-                  </div>
-                  
-                  <p className="text-xs text-slate-400/90 line-clamp-2 leading-relaxed font-normal mb-4">
-                    {product.description}
-                  </p>
-                </div>
-
-                {/* Card Base Meta Footer */}
-                <div className="pt-3 border-t border-slate-50 flex items-center justify-between text-slate-500 text-xs font-medium">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <MapPin size={13} className="text-slate-300 group-hover:text-rose-500 transition-colors duration-300 flex-shrink-0" />
-                    <span className="truncate text-slate-400 text-xs font-semibold" title={product.pickupAddress}>
-                      {product.pickupAddress}
-                    </span>
-                  </div>
-                  
-                  <span className="text-[10px] text-indigo-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 font-bold whitespace-nowrap">
-                    Inspect &rarr;
+              {/* ইমেজ পার্ট */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#F9F9F7]">
+                <Image
+                height={600}
+                width={600}
+                  src={product.image && !product.image.startsWith("blob:") ? product.image : fallbackImage}
+                  alt={product.productName}
+                  className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = fallbackImage;
+                  }}
+                />
+                
+                {/* পার্সেল টাইপ ব্যাজ */}
+                <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded bg-white shadow-xs flex items-center gap-1 text-emerald-800">
+                    <Truck size={11} /> {product.parcelType}
                   </span>
                 </div>
+
+                {/* উইশলিস্ট বাটন */}
+                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <button className="p-2 rounded-full bg-white text-gray-600 hover:text-red-500 shadow-xs transition-all">
+                    <Heart size={14} />
+                  </button>
+                </div>
               </div>
 
-            </div>
+              {/* প্রোডাক্ট ডিটেইলস পার্ট */}
+              <div className="p-5 flex flex-col flex-grow bg-white">
+                
+                {/* লোকেশন */}
+                <div className="flex items-center gap-1 text-gray-400 mb-1.5">
+                  <MapPin size={12} className="text-[#7FA36A]" />
+                  <span className="text-[12px] font-medium truncate">{product.pickupAddress}</span>
+                </div>
+
+                {/* নাম */}
+                <h3 className="text-[16px] font-semibold tracking-tight mb-1 group-hover:text-[#C9922F] transition-colors line-clamp-1" style={{ color: colors.ink }}>
+                  {product.productName}
+                </h3>
+
+                {/* ডেসক্রিপশন */}
+                <p className="text-[12.5px] text-gray-500 line-clamp-2 mb-4 leading-relaxed flex-grow">
+                  {product.description}
+                </p>
+
+                {/* প্রাইস এবং কার্ট অ্যাকশন */}
+                <div className="mt-auto pt-3.5 flex items-center justify-between border-t border-gray-50">
+                  <div>
+                    <span className="text-[10px] text-gray-400 block uppercase tracking-wider font-medium">Price</span>
+                    <span className="text-lg font-bold" style={{ color: colors.forest }}>
+                      ৳{product.price.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ y: -1 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] font-medium transition-all shadow-xs"
+                    style={{ backgroundColor: colors.forest, color: colors.cream }}
+                  >
+                    <ShoppingBag size={13} />
+                    Add
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
 
       </div>
     </div>
   );
-};
-
-export default ProductGrid;
+}
