@@ -5,6 +5,7 @@ import FeaturedProducts from "./Components/Product.";
 import WhyChooseUs from "./Components/WhyChoose";
 import BlogSection from "./Components/Blog";
 import FAQSection from "./Components/Faq";
+import CustomerReviewsSection from "./Components/Review";
 // import Footer from "./Components/Footer";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
    <WhyChooseUs/>
    <BlogSection/>
    <FAQSection/>
+   <CustomerReviewsSection/>
   
    </>
   );

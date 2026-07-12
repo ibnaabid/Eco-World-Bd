@@ -1,4 +1,5 @@
 import { Flame, ShoppingBasket } from "lucide-react";
+import Image from "next/image";
 
 const colors = {
   forest: "#1F3D2B",
@@ -88,7 +89,9 @@ export default function BestSellers(): JSX.Element {
               </span>
 
               <div className="w-full sm:w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ backgroundColor: "#2A4A35" }}>
-                <img
+                <Image
+                height={400}
+                width={400}
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

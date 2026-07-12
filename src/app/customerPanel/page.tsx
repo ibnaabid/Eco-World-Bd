@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ShoppingBag, PlusCircle, Settings, LogOut, Menu, X, User } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, PlusCircle, Settings, LogOut, Menu, X, User, Star } from "lucide-react";
 
 export default function CustomerPanelLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ export default function CustomerPanelLayout({ children }: { children: React.Reac
 const menuItems = [
   { name: "Dashboard Overview", href: "/dashboard/customer/dashboard", icon: LayoutDashboard },
   { name: "Explore Favourite Items", href: "/dashboard/customer/favorites", icon: ShoppingBag },
+    { name: "Customer Reviews", href: "/dashboard/customer/reviews", icon: Star },
   { name: "Add Custom orders", href: "/dashboard/customer/orders", icon: PlusCircle },
   { name: "Manage Profile", href: "/dashboard/customer/manage", icon: Settings },
 ];

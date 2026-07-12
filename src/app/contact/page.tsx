@@ -41,7 +41,7 @@ export default function ContactPage(): JSX.Element {
   };
 
   const fields = [
-    { key: "name", label: "Your Name", type: "text", placeholder: "Abid Hasan" },
+    { key: "name", label: "Your Name", type: "text", placeholder: "User" },
     { key: "email", label: "Email Address", type: "email", placeholder: "you@example.com" },
   ];
 
@@ -100,9 +100,9 @@ export default function ContactPage(): JSX.Element {
             className="md:col-span-2 flex flex-col gap-4"
           >
             {[
-              { icon: <MapPin size={18} />, title: "Visit Us", detail: "Mirpur DOHS, Dhaka, Bangladesh" },
-              { icon: <Phone size={18} />, title: "Call Us", detail: "+880 1322-810864" },
-              { icon: <Mail size={18} />, title: "Email Us", detail: "hello@bamboocraft.com" },
+              { icon: <MapPin size={18} />, title: "Visit Us", detail: "Fulbari, Dinajpur, Bangladesh" },
+              { icon: <Phone size={18} />, title: "Call Us", detail: "+880 1823-633271" },
+              { icon: <Mail size={18} />, title: "Email Us", detail: "mdmosabbirrahman07@gmail.com" },
             ].map((item, i) => (
               <motion.div
                 key={i}

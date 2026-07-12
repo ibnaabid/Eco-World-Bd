@@ -126,7 +126,7 @@ export default function Footer() {
                 <Phone className="text-green-400" size={20} />
 
                 <p className="text-gray-300">
-                  +880 1712-345678
+                  +880 1823-633271
                 </p>
 
               </div>
@@ -136,7 +136,7 @@ export default function Footer() {
                 <Mail className="text-green-400" size={20} />
 
                 <p className="text-gray-300">
-                  support@ecoworld.com
+                  mdmosabbirrahman07@gmail.com
                 </p>
 
               </div>

@@ -31,5 +31,7 @@ export const config = {
   matcher: [
     "/dashboard/admin/:path*",
     "/dashboard/customer/:path*",
+    "/shop",
+
   ],
 };
