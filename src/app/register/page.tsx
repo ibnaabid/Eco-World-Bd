@@ -93,15 +93,16 @@ export default function RegisterPage(): JSX.Element {
   };
 
   const handleGoogleSignIn = async (e: React.MouseEvent) => {
-    e.preventDefault(); 
+
     setGoogleLoading(true);
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "/",
       });
+
     } catch (err) {
-      console.error("Google sign-in failed", err);
+      toast.error("Google sign-in failed", err);
     } finally {
       setGoogleLoading(false);
     }

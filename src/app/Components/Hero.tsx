@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight, Leaf } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const colors = {
   forest: "#1F3D2B",
@@ -121,21 +122,21 @@ export default function BambooHero(): JSX.Element {
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <a
-                href="#"
+              <Link
+                href="/shop"
                 className="flex items-center gap-2 px-6 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:-translate-y-0.5"
                 style={{ backgroundColor: colors.ochre, color: colors.cream }}
               >
                 Explore Products
                 <ArrowRight size={16} strokeWidth={2} />
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/blog"
                 className="px-6 py-3.5 rounded-full text-[14px] font-semibold border transition-colors hover:bg-white/5"
                 style={{ borderColor: "rgba(246,242,233,0.35)", color: colors.cream }}
               >
                 Meet the Artisans
-              </a>
+              </Link>
             </div>
           </div>
         </div>
