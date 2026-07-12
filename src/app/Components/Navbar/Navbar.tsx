@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShoppingBasket, Menu, ChevronDown, User } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client";
-// Better Auth ক্লায়েন্ট ইমপোর্ট করুন (আপনার প্রজেক্টের পাথ অনুযায়ী পরিবর্তন করতে পারেন)
-
 
 const colors = {
   forest: "#1F3D2B",
@@ -20,8 +18,14 @@ const colors = {
 interface NavLink {
   label: string;
   href: string;
-  variant?: "button" | "outline" | "username"; // "username" ভ্যারিয়েন্ট যোগ করা হয়েছে প্রোফাইল টেক্সটের জন্য
+  variant?: "button" | "outline" | "username";
 }
+
+// 🎯 এখানে আপনার প্রজেক্টের অ্যাডমিন ইমেইলগুলো বসিয়ে দিন
+const ADMIN_EMAILS = [
+  "mdmosabbirrahman07@gmail.com",
+   // আপনার নিজের ইমেইলটি এখানে দিয়ে টেস্ট করতে পারেন
+];
 
 // Logged out — 7 routes
 const loggedOutLinks: NavLink[] = [
@@ -32,17 +36,6 @@ const loggedOutLinks: NavLink[] = [
   { label: "Blog", href: "/blog" },
   { label: "Login", href: "/login", variant: "outline" },
   { label: "Register", href: "/register", variant: "button" },
-];
-
-// Logged in — 6 base routes (Username এবং Logout নিচে ডায়নামিক্যালি হ্যান্ডেল করা হবে)
-const loggedInLinks: NavLink[] = [
-  { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "Dashboard", href: "/dashboard/customer" },
-  { label: "My Orders", href: "/orders" },
-  { label: "Wishlist", href: "/wishlist" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
 ];
 
 export default function BambooNavbar(): JSX.Element {
@@ -57,12 +50,28 @@ export default function BambooNavbar(): JSX.Element {
   const { data: session, isPending } = authClient.useSession();
   const isLoggedIn = !!session;
   const username = session?.user?.name || "Profile";
+  const userEmail = session?.user?.email;
 
-  // ডায়নামিক্যালি লিংক জেনারেট করা হচ্ছে সেশনের ওপর ভিত্তি করে
+  // 🎯 লগইন করা ইউজারের ইমেইলটি ADMIN_EMAILS অ্যারেতে আছে কিনা চেক করা হচ্ছে
+  const isAdmin = userEmail ? ADMIN_EMAILS.includes(userEmail) : false;
+  const dashboardHref = isAdmin ? "/dashboard/admin" : "/dashboard/customer";
+
+  // Logged in — বেস রুটগুলোকে ডায়নামিক ড্যাশবোর্ড লিংকের সাথে জেনারেট করা হচ্ছে
+  const loggedInLinks: NavLink[] = [
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/shop" },
+    { label: "Dashboard", href: dashboardHref }, // 🎯 Dynamic Admin / Customer Link
+    { label: "My Orders", href: "/orders" },
+    { label: "Wishlist", href: "/wishlist" },
+    { label: "Blog", href: "/blog" },
+    { label: "About", href: "/about" },
+  ];
+
+  // ডায়নামিক্যালি লিংক জেনারেট করা হচ্ছে সেশনের ওপর ভিত্তি করে
   const links: NavLink[] = isLoggedIn
     ? [
         ...loggedInLinks,
-        { label: username, href: "/dashboard", variant: "username" },
+        { label: username, href: dashboardHref, variant: "username" },
         { label: "Logout", href: "#", variant: "outline" },
       ]
     : loggedOutLinks;
@@ -74,14 +83,14 @@ export default function BambooNavbar(): JSX.Element {
     if (panelRef.current) {
       setPanelHeight(menuOpen ? panelRef.current.scrollHeight : 0);
     }
-  }, [menuOpen, isLoggedIn, isPending]);
+  }, [menuOpen, isLoggedIn, isPending, dashboardHref]);
 
   // Logout হ্যান্ডলার
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/"); // লগআউট সফল হলে হোমপেজে নিয়ে যাবে
+          router.push("/");
           router.refresh();
         },
       },
