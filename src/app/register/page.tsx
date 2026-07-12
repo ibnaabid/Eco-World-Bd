@@ -93,7 +93,7 @@ export default function RegisterPage(): JSX.Element {
   };
 
   const handleGoogleSignIn = async (e: React.MouseEvent) => {
-    e.preventDefault(); // ফর্ম সাবমিট হওয়া প্রতিরোধ করতে
+    e.preventDefault(); 
     setGoogleLoading(true);
     try {
       await authClient.signIn.social({

@@ -11,10 +11,10 @@ export default function CustomerPanelLayout({ children }: { children: React.Reac
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
 const menuItems = [
-  { name: "Dashboard Overview", href: "/customer/dashboard", icon: LayoutDashboard },
-  { name: "Explore Favourite Items", href: "/customer/favorites", icon: ShoppingBag },
-  { name: "Add Custom orders", href: "/customer/orders", icon: PlusCircle },
-  { name: "Manage Profile", href: "/customer/manage", icon: Settings },
+  { name: "Dashboard Overview", href: "/dashboard/customer/dashboard", icon: LayoutDashboard },
+  { name: "Explore Favourite Items", href: "/dashboard/customer/favorites", icon: ShoppingBag },
+  { name: "Add Custom orders", href: "/dashboard/customer/orders", icon: PlusCircle },
+  { name: "Manage Profile", href: "/dashboard/customer/manage", icon: Settings },
 ];
   return (
     <div className="min-h-screen bg-[#FAF7F0] text-[#211F16] flex relative overflow-hidden">
