@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// Better Auth ক্লায়েন্ট ইমপোর্ট করুন (আপনার প্রোজেক্ট স্ট্রাকচার অনুযায়ী পাথ পরিবর্তন হতে পারে)
 import toast from "react-hot-toast";
 import { authClient } from "../lib/auth-client";
 
@@ -44,6 +43,9 @@ export default function LoginPage(): JSX.Element {
     return Object.keys(next).length === 0;
   };
 
+  // ==========================================
+  // ACTION: Safe Email Sign-In Processor
+  // ==========================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
@@ -60,8 +62,18 @@ export default function LoginPage(): JSX.Element {
         setLoading(false);
         return;
       }
- toast.success("Login successfull")
-      router.push("/dashboard"); 
+
+      toast.success("Login successful");
+
+      // 🎯 Fixed: Checked matching strings from form runtime object keys natively
+      if (
+        form?.email === "mdmosabbirrahman07@gmail.com" &&
+        form?.password === "123456789"
+      ) {
+        router.push("/dashboard/admin");
+      } else {
+        router.push("/customer/dashboard");
+      }
     } catch (err) {
       setErrors({ general: "Something went wrong. Please try again." });
       setLoading(false);
@@ -73,7 +85,7 @@ export default function LoginPage(): JSX.Element {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard", // গুগল লগইন সফল হলে রিডাইরেক্ট পাথ
+        callbackURL: "/dashboard", 
       });
     } catch (err) {
       console.error("Google sign-in failed", err);
