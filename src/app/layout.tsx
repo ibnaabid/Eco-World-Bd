@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Eco World BD",
+   icons: {
+    icon: "/download (1).jpg",   
+  },
   description: "Eco-friendly handmade crafts",
 };
 
