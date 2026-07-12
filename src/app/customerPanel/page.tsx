@@ -1,3 +1,4 @@
+// ফাইল পাথ: app/customerPanel/layout.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -5,22 +6,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, ShoppingBag, PlusCircle, Settings, LogOut, Menu, X, User } from "lucide-react";
 
-export default function CustomerLayout({ children }: { children: React.ReactNode }) {
+export default function CustomerPanelLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 📝 ৫টি রুটস মেনু (অ্যাসাইনমেন্ট রিকোয়ারমেন্ট-৩)
-  const menuItems = [
-    { name: "Dashboard Overview", href: "/customer/dashboard", icon: LayoutDashboard },
-    { name: "Explore Favourite Items", href: "/customer/favorites", icon: ShoppingBag },
-    { name: "Add Custom orders", href: "/customer/orders", icon: PlusCircle },
-    { name: "Manage Profile", href: "/customer/manage", icon: Settings },
-  ];
-
+const menuItems = [
+  { name: "Dashboard Overview", href: "/customer/dashboard", icon: LayoutDashboard },
+  { name: "Explore Favourite Items", href: "/customer/favorites", icon: ShoppingBag },
+  { name: "Add Custom orders", href: "/customer/orders", icon: PlusCircle },
+  { name: "Manage Profile", href: "/customer/manage", icon: Settings },
+];
   return (
     <div className="min-h-screen bg-[#FAF7F0] text-[#211F16] flex relative overflow-hidden">
       
-      {/* 📱 MOBILE SIDEBAR BACKDROP (ওভারল্যাপ ও ক্লিক ট্র্যাকিং বন্ধ করার জন্য) */}
+      {/* MOBILE SIDEBAR BACKDROP */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity" 
@@ -28,7 +27,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
         />
       )}
 
-      {/* 🌲 SIDEBAR NAVIGATION (Z-Index এবং রেসপনসিভ উইডথ ফিক্সড) */}
+      {/* SIDEBAR NAVIGATION */}
       <aside className={`
         fixed inset-y-0 left-0 bg-[#16301F] text-[#FAF7F0] w-64 p-6 flex flex-col justify-between 
         transition-transform duration-300 ease-in-out z-50
@@ -56,7 +55,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => setSidebarOpen(false)} // মোবাইল মেনু লিংকে ক্লিক করলে সাইডবার বন্ধ হবে
+                  onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all ${
                     isActive ? "bg-[#7FA36A] text-white font-semibold shadow-md" : "text-[#FAF7F0]/70 hover:bg-white/5 hover:text-white"
                   }`}
@@ -76,7 +75,6 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
               <User size={18} />
             </div>
             <div>
-              {/* <p className="text-xs font-semibold text-white truncate max-w-[140px]">Mosabbir Rahman</p> */}
               <p className="text-[10px] text-[#FAF7F0]/50">Customer Account</p>
             </div>
           </div>
@@ -87,9 +85,9 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
         </div>
       </aside>
 
-      {/* 🚀 MAIN CONTENT WRAPPER */}
+      {/* MAIN CONTENT WRAPPER */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto z-30">
-        {/* MOBILE TOP NAVBAR (মোবাইলের জন্য স্টিকি হেডার) */}
+        {/* MOBILE TOP NAVBAR */}
         <header className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between lg:hidden z-40 shadow-sm">
           <span className="text-lg font-bold text-[#16301F]" style={{ fontFamily: "Georgia, serif" }}>Eco World_BD</span>
           <button className="p-2 text-[#16301F] hover:bg-gray-100 rounded-lg" onClick={() => setSidebarOpen(true)}>
@@ -97,9 +95,9 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
           </button>
         </header>
 
-        {/* PAGE BODY (চাইল্ড কন্টেন্ট এরিয়া) */}
+        {/* PAGE BODY */}
         <main className="p-4 sm:p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto">
-          {children}
+          {children} {/* আপনার সব পেজের কনটেন্ট স্বয়ংক্রিয়ভাবে এখানে লোড হবে */}
         </main>
       </div>
 

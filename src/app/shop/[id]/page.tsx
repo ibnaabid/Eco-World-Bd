@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 
+
 interface Product {
   _id: string;
   productName: string;
@@ -179,7 +180,7 @@ const Page = async ({ params }: PageProps) => {
 
               </button>
 
-             <FavouriteButton product={product}/>
+             
 
                <button className="h-14 px-8 rounded-2xl border-2 border-emerald-700 text-emerald-700 font-semibold hover:bg-emerald-700 hover:text-white transition">
 
