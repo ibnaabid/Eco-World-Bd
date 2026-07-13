@@ -75,12 +75,21 @@ const posts: BlogPost[] = [
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { 
+      duration: 0.6, 
+      ease: "easeOut" as const     // ← This fixes the error
+    }
+  },
 };
 
 const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
+  show: { 
+    transition: { staggerChildren: 0.1 } 
+  },
 };
 
 export default function BlogPage() {
@@ -119,7 +128,7 @@ export default function BlogPage() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut" as const }}
           whileHover={{ y: -4 }}
           className="group max-w-6xl mx-auto grid md:grid-cols-2 gap-0 rounded-3xl overflow-hidden bg-white shadow-lg mb-16"
         >
