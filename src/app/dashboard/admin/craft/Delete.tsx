@@ -70,8 +70,8 @@ export default function DeleteProductDialog({
                 Cancel
               </Button>
 
-              <Button 
-                color="danger" 
+              <Button className="bg-red-500"
+                
                 onClick={handleDelete}
               >
                 Yes, Delete
