@@ -41,7 +41,7 @@ export default function DeleteProductDialog({
     <AlertDialog>
       {/* Fixed Trigger Button */}
       <Button 
-        color="danger" 
+        
         variant="ghost"           // Changed from "flat"
         className="bg-red-600 hover:bg-red-700 text-white"
       >
