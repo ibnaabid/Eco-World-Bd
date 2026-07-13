@@ -12,7 +12,7 @@ const colors = {
   ochre: "#B8863B",
 };
 
-export default function NotFound(): JSX.Element {
+export default function NotFound() {
   return (
     <div
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-5"
@@ -20,7 +20,7 @@ export default function NotFound(): JSX.Element {
     >
       {/* Background Bamboo Stalks */}
       <div className="absolute inset-0 flex items-end justify-around px-10 opacity-[0.15] pointer-events-none">
-        {[...Array(7)].map((_, i) => (
+        {[...Array(7)].map((_, i: number) => (
           <motion.svg
             key={i}
             width="22"
@@ -39,7 +39,7 @@ export default function NotFound(): JSX.Element {
       </div>
 
       {/* Floating Leaves */}
-      {[...Array(4)].map((_, i) => (
+      {[...Array(4)].map((_, i: number) => (
         <motion.div
           key={i}
           className="absolute"
