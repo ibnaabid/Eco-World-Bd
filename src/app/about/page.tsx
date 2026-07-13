@@ -4,17 +4,7 @@ import { motion } from "framer-motion";
 import { Leaf, Hammer, Users, TrendingUp } from "lucide-react";
 import Image from "next/image";
 
-interface ColorScheme {
-  forest: string;
-  forestDeep: string;
-  moss: string;
-  bambooTan: string;
-  cream: string;
-  ochre: string;
-  ink: string;
-}
-
-const colors: ColorScheme = {
+const colors = {
   forest: "#1F3D2B",
   forestDeep: "#16301F",
   moss: "#6B8F5C",
@@ -33,22 +23,26 @@ const stats = [
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { 
+      duration: 0.6, 
+      ease: "easeOut" as const 
+    }
+  },
 };
 
 const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
+  show: { 
+    transition: { staggerChildren: 0.12 } 
+  },
 };
 
 export default function AboutPage() {
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=Inter:wght@400;500;600;700&display=swap');
-        .brand-font { font-family: 'Fraunces', serif; }
-      `}</style>
-
+    <>
       {/* Hero */}
       <section
         className="relative overflow-hidden py-24 md:py-32 px-5 md:px-8"
@@ -57,7 +51,7 @@ export default function AboutPage() {
         <motion.div
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.12, scale: 1 }}
-          transition={{ duration: 1.4, ease: "easeOut" }}
+          transition={{ duration: 1.4, ease: "easeOut" as const }}
           className="absolute inset-0"
         >
           <svg width="100%" height="100%" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
@@ -82,7 +76,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="brand-font text-4xl md:text-6xl leading-[1.1]"
+            className="font-serif text-4xl md:text-6xl leading-[1.1]"
             style={{ color: colors.cream }}
           >
             Every piece carries
@@ -125,7 +119,7 @@ export default function AboutPage() {
               >
                 {s.icon}
               </div>
-              <span className="brand-font text-2xl md:text-3xl" style={{ color: colors.forest }}>
+              <span className="font-serif text-2xl md:text-3xl" style={{ color: colors.forest }}>
                 {s.value}
               </span>
               <span className="text-[12px] mt-1" style={{ color: "rgba(42,42,34,0.6)" }}>
@@ -137,13 +131,13 @@ export default function AboutPage() {
       </section>
 
       {/* Story + Image */}
-      <section className="py-20 px-5 md:px-8" style={{ backgroundColor: "#FFFFFF" }}>
+      <section className="py-20 px-5 md:px-8 bg-white">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: "easeOut" as const }}
             className="relative aspect-[4/3] rounded-2xl overflow-hidden"
             style={{ backgroundColor: "#EDE7D8" }}
           >
@@ -160,12 +154,12 @@ export default function AboutPage() {
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+            transition={{ duration: 0.7, ease: "easeOut" as const, delay: 0.15 }}
           >
             <span className="text-[12px] font-semibold tracking-[0.15em] uppercase" style={{ color: colors.moss }}>
               How We Work
             </span>
-            <h2 className="brand-font text-3xl md:text-4xl mt-2 mb-5" style={{ color: colors.ink }}>
+            <h2 className="font-serif text-3xl md:text-4xl mt-2 mb-5" style={{ color: colors.ink }}>
               Craft first, margins second
             </h2>
             <p className="text-[14.5px] leading-relaxed mb-4" style={{ color: "rgba(42,42,34,0.65)" }}>
@@ -196,7 +190,7 @@ export default function AboutPage() {
             <span className="text-[12px] font-semibold tracking-[0.15em] uppercase" style={{ color: colors.bambooTan }}>
               What We Stand For
             </span>
-            <h2 className="brand-font text-3xl md:text-4xl mt-2" style={{ color: colors.cream }}>
+            <h2 className="font-serif text-3xl md:text-4xl mt-2" style={{ color: colors.cream }}>
               Three things we won't compromise on
             </h2>
           </motion.div>
@@ -220,7 +214,7 @@ export default function AboutPage() {
                 className="p-7 rounded-2xl border transition-colors"
                 style={{ borderColor: "rgba(201,168,118,0.15)", backgroundColor: "rgba(255,255,255,0.02)" }}
               >
-                <span className="brand-font text-3xl" style={{ color: colors.bambooTan }}>
+                <span className="font-serif text-3xl" style={{ color: colors.bambooTan }}>
                   0{i + 1}
                 </span>
                 <h3 className="text-[16px] font-semibold mt-3 mb-2" style={{ color: colors.cream }}>
@@ -234,6 +228,6 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
