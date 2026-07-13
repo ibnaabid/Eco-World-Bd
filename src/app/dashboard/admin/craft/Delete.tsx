@@ -20,9 +20,7 @@ export default function DeleteProductDialog({
     try {
       const res = await fetch(
         `http://localhost:5000/products/${product._id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
       const data = await res.json();
@@ -41,11 +39,11 @@ export default function DeleteProductDialog({
 
   return (
     <AlertDialog>
-      {/* Trigger Button - Fixed */}
+      {/* Fixed Trigger Button */}
       <Button 
         color="danger" 
-        variant="flat" 
-        className="bg-red-600 hover:bg-red-700"
+        variant="ghost"           // Changed from "flat"
+        className="bg-red-600 hover:bg-red-700 text-white"
       >
         <Trash2 size={18} />
         Delete
@@ -58,14 +56,11 @@ export default function DeleteProductDialog({
 
             <AlertDialog.Header>
               <AlertDialog.Icon status="danger" />
-              <AlertDialog.Heading>
-                Delete Product?
-              </AlertDialog.Heading>
+              <AlertDialog.Heading>Delete Product?</AlertDialog.Heading>
             </AlertDialog.Header>
 
             <AlertDialog.Body>
-              Are you sure you want to delete{" "}
-              <strong>{product.productName}</strong>? 
+              Are you sure you want to delete <strong>{product.productName}</strong>? 
               <br />
               This action cannot be undone.
             </AlertDialog.Body>
