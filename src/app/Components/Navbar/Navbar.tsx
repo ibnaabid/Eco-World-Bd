@@ -22,21 +22,7 @@ interface NavLink {
 }
 
 // 🎯 এখানে আপনার প্রজেক্টের অ্যাডমিন ইমেইলগুলো বসিয়ে দিন
-const ADMIN_EMAILS = [
-  "mdmosabbirrahman07@gmail.com",
-  // আপনার নিজের ইমেইলটি এখানে দিয়ে টেস্ট করতে পারেন
-];
-
-// Logged out — 7 routes
-const loggedOutLinks: NavLink[] = [
-  { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Blog", href: "/blog" },
-  { label: "Login", href: "/login", variant: "outline" },
-  { label: "Register", href: "/register", variant: "button" },
-];
+const ADMIN_EMAILS = ["mdmosabbirrahman07@gmail.com"];
 
 export default function BambooNavbar() {
   const router = useRouter();
@@ -46,17 +32,14 @@ export default function BambooNavbar() {
   const [panelHeight, setPanelHeight] = useState(0);
   const cartCount = 3;
 
-  // Better Auth থেকে সেশন এবং ইউজারের ডাটা ফেচ করা হচ্ছে
   const { data: session, isPending } = authClient.useSession();
   const isLoggedIn = !!session;
   const username = session?.user?.name || "Profile";
   const userEmail = session?.user?.email;
 
-  // 🎯 লগইন করা ইউজারের ইমেইলটি ADMIN_EMAILS অ্যারেতে আছে কিনা চেক করা হচ্ছে
   const isAdmin = userEmail ? ADMIN_EMAILS.includes(userEmail) : false;
   const dashboardHref = isAdmin ? "/dashboard/admin" : "/dashboard/customer";
 
-  // Logged in — বেস রুটগুলোকে ডায়নামিক ড্যাশবোর্ড লিংকের সাথে জেনারেট করা হচ্ছে
   const loggedInLinks: NavLink[] = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
@@ -73,7 +56,15 @@ export default function BambooNavbar() {
         { label: username, href: dashboardHref, variant: "username" },
         { label: "Logout", href: "#", variant: "outline" },
       ]
-    : loggedOutLinks;
+    : [
+        { label: "Home", href: "/" },
+        { label: "Shop", href: "/shop" },
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "/contact" },
+        { label: "Blog", href: "/blog" },
+        { label: "Login", href: "/login", variant: "outline" },
+        { label: "Register", href: "/register", variant: "button" },
+      ];
 
   const plainLinks = links.filter((l) => !l.variant);
   const actionLinks = links.filter((l) => l.variant);
@@ -84,7 +75,6 @@ export default function BambooNavbar() {
     }
   }, [menuOpen, isLoggedIn, isPending, dashboardHref]);
 
-  // Logout হ্যান্ডলার
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -125,18 +115,13 @@ export default function BambooNavbar() {
       >
         <div className="w-full px-5 md:px-8">
           <div className="max-w-[1500px] mx-auto flex items-center justify-between h-[70px] gap-3">
-            {/* Logo Section */}
             <Logo />
-
-            {/* Desktop Navigation Links */}
             <DesktopNav
               plainLinks={plainLinks}
               activeLink={activeLink}
               setActiveLink={setActiveLink}
               isPending={isPending}
             />
-
-            {/* Desktop Action Buttons (Cart + Auth) */}
             <DesktopActions
               actionLinks={actionLinks}
               cartCount={cartCount}
@@ -144,8 +129,6 @@ export default function BambooNavbar() {
               isPending={isPending}
               colors={colors}
             />
-
-            {/* Mobile Menu Toggle */}
             <MobileMenuToggle
               menuOpen={menuOpen}
               setMenuOpen={setMenuOpen}
@@ -154,7 +137,6 @@ export default function BambooNavbar() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Panel */}
         <MobileDropdown
           menuOpen={menuOpen}
           panelHeight={panelHeight}
@@ -237,17 +219,7 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
 
   return (
     <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-      <button aria-label="Cart" className="relative p-2 rounded-full transition-colors hover:bg-white/5">
-        <ShoppingBasket size={17} color={cream} strokeWidth={1.8} />
-        {cartCount > 0 && (
-          <span
-            className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold"
-            style={{ backgroundColor: ochre, color: cream, width: 16, height: 16 }}
-          >
-            {cartCount}
-          </span>
-        )}
-      </button>
+      <CartButton cartCount={cartCount} colors={colors} />
 
       {!isPending &&
         actionLinks.map((link) => {
@@ -266,34 +238,78 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
 
           if (link.variant === "username") {
             return (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="flex items-center gap-1.5 text-[12.5px] xl:text-[13px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap bg-white/10 max-w-[150px] truncate"
-                style={{ color: colors.bambooTan }}
-              >
-                <User size={14} />
-                <span className="truncate">{link.label}</span>
-              </Link>
+              <UsernameLink key={link.label} label={link.label} href={link.href} colors={colors} />
             );
           }
 
           return (
-            <Link
+            <ActionLink
               key={link.label}
+              label={link.label}
               href={link.href}
-              className="text-[12.5px] xl:text-[13px] font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors"
-              style={
-                link.variant === "button"
-                  ? { backgroundColor: ochre, color: cream }
-                  : { border: "1px solid rgba(201,168,118,0.35)", color: cream }
-              }
-            >
-              {link.label}
-            </Link>
+              variant={link.variant}
+              colors={colors}
+            />
           );
         })}
     </div>
+  );
+}
+
+function CartButton({ cartCount, colors }: { cartCount: number; colors: typeof colors }) {
+  const { cream, ochre } = colors;
+  return (
+    <button aria-label="Cart" className="relative p-2 rounded-full transition-colors hover:bg-white/5">
+      <ShoppingBasket size={17} color={cream} strokeWidth={1.8} />
+      {cartCount > 0 && (
+        <span
+          className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold"
+          style={{ backgroundColor: ochre, color: cream, width: 16, height: 16 }}
+        >
+          {cartCount}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function UsernameLink({ label, href, colors }: { label: string; href: string; colors: typeof colors }) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center gap-1.5 text-[12.5px] xl:text-[13px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap bg-white/10 max-w-[150px] truncate"
+      style={{ color: colors.bambooTan }}
+    >
+      <User size={14} />
+      <span className="truncate">{label}</span>
+    </Link>
+  );
+}
+
+function ActionLink({
+  label,
+  href,
+  variant,
+  colors,
+}: {
+  label: string;
+  href: string;
+  variant?: string;
+  colors: typeof colors;
+}) {
+  const { cream, ochre } = colors;
+  return (
+    <Link
+      href={href}
+      className="text-[12.5px] xl:text-[13px] font-semibold px-4 py-2 rounded-full whitespace-nowrap transition-colors"
+      style={
+        variant === "button"
+          ? { backgroundColor: ochre, color: cream }
+          : { border: "1px solid rgba(201,168,118,0.35)", color: cream }
+      }
+    >
+      {label}
+    </Link>
   );
 }
 
@@ -325,7 +341,7 @@ function MobileMenuToggle({ menuOpen, setMenuOpen, colors }: MobileMenuTogglePro
 interface MobileDropdownProps {
   menuOpen: boolean;
   panelHeight: number;
-  panelRef: React.RefObject<HTMLDivElement>;
+  panelRef: React.RefObject<HTMLDivElement | null>;
   plainLinks: NavLink[];
   actionLinks: NavLink[];
   activeLink: string;
@@ -386,20 +402,7 @@ function MobileDropdown({
             ))}
 
           <div className="flex items-center gap-3 mt-5">
-            <button
-              className="p-2.5 rounded-full relative shrink-0"
-              style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
-            >
-              <ShoppingBasket size={17} color={cream} />
-              {cartCount > 0 && (
-                <span
-                  className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold"
-                  style={{ backgroundColor: ochre, color: cream, width: 16, height: 16 }}
-                >
-                  {cartCount}
-                </span>
-              )}
-            </button>
+            <CartButton cartCount={cartCount} colors={colors} />
 
             {!isPending &&
               actionLinks.map((link) => {
@@ -421,39 +424,23 @@ function MobileDropdown({
 
                 if (link.variant === "username") {
                   return (
-                    <Link
+                    <UsernameLink
                       key={link.label}
+                      label={link.label}
                       href={link.href}
-                      onClick={() => {
-                        setActiveLink(link.label);
-                        setMenuOpen(false);
-                      }}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[13.5px] font-medium bg-white/10 truncate"
-                      style={{ color: bambooTan }}
-                    >
-                      <User size={14} />
-                      <span className="truncate">{link.label}</span>
-                    </Link>
+                      colors={colors}
+                    />
                   );
                 }
 
                 return (
-                  <Link
+                  <ActionLink
                     key={link.label}
+                    label={link.label}
                     href={link.href}
-                    onClick={() => {
-                      setActiveLink(link.label);
-                      setMenuOpen(false);
-                    }}
-                    className="flex-1 flex items-center justify-center py-2.5 rounded-full text-[13.5px] font-semibold"
-                    style={
-                      link.variant === "button"
-                        ? { backgroundColor: ochre, color: cream }
-                        : { border: "1px solid rgba(201,168,118,0.35)", color: cream }
-                    }
-                  >
-                    {link.label}
-                  </Link>
+                    variant={link.variant}
+                    colors={colors}
+                  />
                 );
               })}
           </div>
