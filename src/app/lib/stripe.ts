@@ -1,5 +1,5 @@
-import 'server-only'
+// lib/stripe.ts  (or utils/stripe.ts)
+import 'server-only';
+import Stripe from 'stripe';
 
-import Stripe from 'stripe'
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
