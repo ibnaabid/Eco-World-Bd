@@ -29,8 +29,6 @@ export default function DeleteProductDialog({
 
       if (data.deletedCount > 0) {
         toast.success("Product deleted successfully!");
-
-        // page refresh
         window.location.reload();
       } else {
         toast.error("Failed to delete product");
@@ -43,7 +41,12 @@ export default function DeleteProductDialog({
 
   return (
     <AlertDialog>
-      <Button className="bg-red-600" variant="flat">
+      {/* Trigger Button - Fixed */}
+      <Button 
+        color="danger" 
+        variant="flat" 
+        className="bg-red-600 hover:bg-red-700"
+      >
         <Trash2 size={18} />
         Delete
       </Button>
@@ -62,19 +65,21 @@ export default function DeleteProductDialog({
 
             <AlertDialog.Body>
               Are you sure you want to delete{" "}
-              <strong>{product.productName}</strong>?
+              <strong>{product.productName}</strong>? 
+              <br />
+              This action cannot be undone.
             </AlertDialog.Body>
 
             <AlertDialog.Footer>
-              <Button slot="close" variant="flat">
+              <Button slot="close" variant="ghost">
                 Cancel
               </Button>
 
-              <Button
-                color="danger"
+              <Button 
+                color="danger" 
                 onClick={handleDelete}
               >
-                Delete
+                Yes, Delete
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>
