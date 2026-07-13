@@ -24,18 +24,15 @@ interface BlogPost {
   featured?: boolean;
 }
 
-// Temporary stock photos (Unsplash) matching each post's concept.
-// Swap these for your own artisan/product photography when ready.
 const posts: BlogPost[] = [
   {
     id: 1,
     title: "Why Bamboo Grows Back in Just 3 Years",
-    excerpt:
-      "A look at what makes bamboo one of the fastest-renewing materials on earth, and why that matters for furniture.",
+    excerpt: "A look at what makes bamboo one of the fastest-renewing materials on earth, and why that matters for furniture.",
     date: "Jun 18, 2026",
     readTime: "4 min read",
     category: "Sustainability",
-    image: "/an-thet-oI70wSUFgrc-unsplash.jpg", // lush bamboo forest
+    image: "/an-thet-oI70wSUFgrc-unsplash.jpg",
     featured: true,
   },
   {
@@ -45,7 +42,7 @@ const posts: BlogPost[] = [
     date: "Jun 05, 2026",
     readTime: "6 min read",
     category: "Artisans",
-    image: "/an-thet-oI70wSUFgrc-unsplash.jpg", // hands weaving craft
+    image: "/an-thet-oI70wSUFgrc-unsplash.jpg",
   },
   {
     id: 3,
@@ -54,7 +51,7 @@ const posts: BlogPost[] = [
     date: "May 22, 2026",
     readTime: "3 min read",
     category: "Guides",
-    image: "/mahin-ahmed-A4GfCLaB7iY-unsplash.jpg", // bamboo lounge chair
+    image: "/mahin-ahmed-A4GfCLaB7iY-unsplash.jpg",
   },
   {
     id: 4,
@@ -63,7 +60,7 @@ const posts: BlogPost[] = [
     date: "May 10, 2026",
     readTime: "5 min read",
     category: "Process",
-    image: "/wan-salahuddin-wan-ismail-ZZVDfKqkGJ0-unsplash.jpg", // woven basket close-up
+    image: "/wan-salahuddin-wan-ismail-ZZVDfKqkGJ0-unsplash.jpg",
   },
   {
     id: 5,
@@ -72,7 +69,8 @@ const posts: BlogPost[] = [
     date: "Apr 28, 2026",
     readTime: "7 min read",
     category: "Artisans",
-    image: "/gurth-bramall-5sijKMXOXQ4-unsplash.jpg"}
+    image: "/gurth-bramall-5sijKMXOXQ4-unsplash.jpg",
+  },
 ];
 
 const fadeUp = {
@@ -85,16 +83,11 @@ const stagger = {
   show: { transition: { staggerChildren: 0.1 } },
 };
 
-export default function BlogPage(): JSX.Element {
+export default function BlogPage() {
   const [featured, ...rest] = posts;
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
-        .brand-font { font-family: 'Fraunces', serif; }
-      `}</style>
-
+    <>
       {/* Header */}
       <section className="pt-24 pb-14 px-5 md:px-8" style={{ backgroundColor: colors.cream }}>
         <div className="max-w-6xl mx-auto text-center">
@@ -111,7 +104,7 @@ export default function BlogPage(): JSX.Element {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="brand-font text-4xl md:text-5xl"
+            className="font-serif text-4xl md:text-5xl"
             style={{ color: colors.ink }}
           >
             Stories &amp; Craft Notes
@@ -140,6 +133,7 @@ export default function BlogPage(): JSX.Element {
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           </div>
+
           <div className="p-8 md:p-10 flex flex-col justify-center">
             <span
               className="inline-block w-fit px-3 py-1 rounded-full text-[10.5px] font-semibold uppercase tracking-wide mb-4"
@@ -147,12 +141,15 @@ export default function BlogPage(): JSX.Element {
             >
               Featured &middot; {featured.category}
             </span>
-            <h2 className="brand-font text-2xl md:text-3xl mb-3 leading-snug" style={{ color: colors.ink }}>
+
+            <h2 className="font-serif text-2xl md:text-3xl mb-3 leading-snug" style={{ color: colors.ink }}>
               {featured.title}
             </h2>
+
             <p className="text-[14px] leading-relaxed mb-5" style={{ color: "rgba(42,42,34,0.6)" }}>
               {featured.excerpt}
             </p>
+
             <div className="flex items-center gap-3 text-[12px] mb-5" style={{ color: "rgba(42,42,34,0.5)" }}>
               <span>{featured.date}</span>
               <span className="w-1 h-1 rounded-full" style={{ backgroundColor: colors.moss }} />
@@ -161,6 +158,7 @@ export default function BlogPage(): JSX.Element {
                 {featured.readTime}
               </span>
             </div>
+
             <span className="flex items-center gap-1.5 text-[13.5px] font-semibold" style={{ color: colors.forest }}>
               Read full story
               <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -201,6 +199,7 @@ export default function BlogPage(): JSX.Element {
                   {post.category}
                 </span>
               </div>
+
               <div className="flex flex-col flex-1 p-5">
                 <div className="flex items-center gap-3 text-[11px] mb-3" style={{ color: "rgba(42,42,34,0.5)" }}>
                   <span>{post.date}</span>
@@ -210,16 +209,16 @@ export default function BlogPage(): JSX.Element {
                     {post.readTime}
                   </span>
                 </div>
+
                 <h3 className="text-[14.5px] font-semibold mb-2 leading-snug transition-colors group-hover:text-[#1F3D2B]" style={{ color: colors.ink }}>
                   {post.title}
                 </h3>
+
                 <p className="text-[12.5px] leading-relaxed mb-4" style={{ color: "rgba(42,42,34,0.6)" }}>
                   {post.excerpt}
                 </p>
-                <span
-                  className="mt-auto flex items-center gap-1.5 text-[12.5px] font-semibold"
-                  style={{ color: colors.forest }}
-                >
+
+                <span className="mt-auto flex items-center gap-1.5 text-[12.5px] font-semibold" style={{ color: colors.forest }}>
                   Read article
                   <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
@@ -228,6 +227,6 @@ export default function BlogPage(): JSX.Element {
           ))}
         </motion.div>
       </section>
-    </div>
+    </>
   );
 }

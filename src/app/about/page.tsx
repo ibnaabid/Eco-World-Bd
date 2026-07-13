@@ -4,7 +4,17 @@ import { motion } from "framer-motion";
 import { Leaf, Hammer, Users, TrendingUp } from "lucide-react";
 import Image from "next/image";
 
-const colors = {
+interface ColorScheme {
+  forest: string;
+  forestDeep: string;
+  moss: string;
+  bambooTan: string;
+  cream: string;
+  ochre: string;
+  ink: string;
+}
+
+const colors: ColorScheme = {
   forest: "#1F3D2B",
   forestDeep: "#16301F",
   moss: "#6B8F5C",
@@ -31,7 +41,7 @@ const stagger = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 
-export default function AboutPage(): JSX.Element {
+export default function AboutPage() {
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
       <style>{`
@@ -93,7 +103,7 @@ export default function AboutPage(): JSX.Element {
         </div>
       </section>
 
-      {/* Stats — animated counters on scroll */}
+      {/* Stats */}
       <section className="py-16 px-5 md:px-8" style={{ backgroundColor: colors.cream }}>
         <motion.div
           variants={stagger}
@@ -126,7 +136,7 @@ export default function AboutPage(): JSX.Element {
         </motion.div>
       </section>
 
-      {/* Story + image, scroll reveal from both sides */}
+      {/* Story + Image */}
       <section className="py-20 px-5 md:px-8" style={{ backgroundColor: "#FFFFFF" }}>
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -173,7 +183,7 @@ export default function AboutPage(): JSX.Element {
         </div>
       </section>
 
-      {/* Values — staggered cards */}
+      {/* Values */}
       <section className="py-20 px-5 md:px-8" style={{ backgroundColor: colors.forestDeep }}>
         <div className="max-w-6xl mx-auto">
           <motion.div

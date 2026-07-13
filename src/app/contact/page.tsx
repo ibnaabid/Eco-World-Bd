@@ -24,7 +24,7 @@ const stagger = {
   show: { transition: { staggerChildren: 0.1 } },
 };
 
-export default function ContactPage(): JSX.Element {
+export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -35,26 +35,18 @@ export default function ContactPage(): JSX.Element {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Replace with your actual API call, e.g.:
-    // await fetch("/api/contact", { method: "POST", body: JSON.stringify(form) })
+    // TODO: Replace with your actual API call
+    // await fetch("/api/contact", { method: "POST", body: JSON.stringify(form) });
     setSubmitted(true);
   };
 
-  const fields = [
-    { key: "name", label: "Your Name", type: "text", placeholder: "User" },
-    { key: "email", label: "Email Address", type: "email", placeholder: "you@example.com" },
-  ];
+  const resetForm = () => {
+    setSubmitted(false);
+    setForm({ name: "", email: "", message: "" });
+  };
 
   return (
-    <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
-        .brand-font { font-family: 'Fraunces', serif; }
-        .contact-input {
-          transition: border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-      `}</style>
-
+    <>
       {/* Hero */}
       <section className="pt-24 pb-16 px-5 md:px-8 text-center" style={{ backgroundColor: colors.forest }}>
         <motion.span
@@ -66,15 +58,17 @@ export default function ContactPage(): JSX.Element {
         >
           Get In Touch
         </motion.span>
+
         <motion.h1
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="brand-font text-4xl md:text-5xl"
+          className="font-serif text-4xl md:text-5xl"
           style={{ color: colors.cream }}
         >
           Let&apos;s talk bamboo.
         </motion.h1>
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -82,15 +76,13 @@ export default function ContactPage(): JSX.Element {
           className="mt-4 max-w-md mx-auto text-[14.5px]"
           style={{ color: "rgba(246,242,233,0.7)" }}
         >
-          Questions about an order, a custom piece, or a partnership — we
-          read every message.
+          Questions about an order, a custom piece, or a partnership — we read every message.
         </motion.p>
       </section>
 
       {/* Contact grid */}
       <section className="py-20 px-5 md:px-8" style={{ backgroundColor: colors.cream }}>
         <div className="max-w-6xl mx-auto grid md:grid-cols-5 gap-8">
-
           {/* Info cards */}
           <motion.div
             variants={stagger}
@@ -152,18 +144,15 @@ export default function ContactPage(): JSX.Element {
                   >
                     <CheckCircle2 size={48} color={colors.moss} strokeWidth={1.5} />
                   </motion.div>
-                  <h3 className="brand-font text-2xl mt-5 mb-2" style={{ color: colors.ink }}>
+                  <h3 className="font-serif text-2xl mt-5 mb-2" style={{ color: colors.ink }}>
                     Message sent!
                   </h3>
                   <p className="text-[13.5px]" style={{ color: "rgba(42,42,34,0.6)" }}>
                     We&apos;ll get back to you within 24 hours.
                   </p>
                   <button
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm({ name: "", email: "", message: "" });
-                    }}
-                    className="mt-6 text-[13px] font-semibold"
+                    onClick={resetForm}
+                    className="mt-6 text-[13px] font-semibold hover:underline"
                     style={{ color: colors.forest }}
                   >
                     Send another message
@@ -178,28 +167,49 @@ export default function ContactPage(): JSX.Element {
                   exit={{ opacity: 0 }}
                   className="flex flex-col gap-5"
                 >
-                  {fields.map((field) => (
-                    <div key={field.key}>
-                      <label className="text-[12.5px] font-medium mb-1.5 block" style={{ color: colors.ink }}>
-                        {field.label}
-                      </label>
-                      <input
-                        required
-                        type={field.type}
-                        value={form[field.key as keyof typeof form]}
-                        onChange={(e) => handleChange(field.key, e.target.value)}
-                        onFocus={() => setFocusedField(field.key)}
-                        onBlur={() => setFocusedField(null)}
-                        placeholder={field.placeholder}
-                        className="contact-input w-full px-4 py-3 rounded-xl text-[14px] outline-none border"
-                        style={{
-                          borderColor: focusedField === field.key ? colors.forest : "rgba(0,0,0,0.1)",
-                          boxShadow: focusedField === field.key ? `0 0 0 3px rgba(31,61,43,0.1)` : "none",
-                        }}
-                      />
-                    </div>
-                  ))}
+                  {/* Name */}
+                  <div>
+                    <label className="text-[12.5px] font-medium mb-1.5 block" style={{ color: colors.ink }}>
+                      Your Name
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => handleChange("name", e.target.value)}
+                      onFocus={() => setFocusedField("name")}
+                      onBlur={() => setFocusedField(null)}
+                      placeholder="User"
+                      className="w-full px-4 py-3 rounded-xl text-[14px] outline-none border transition-all"
+                      style={{
+                        borderColor: focusedField === "name" ? colors.forest : "rgba(0,0,0,0.1)",
+                        boxShadow: focusedField === "name" ? "0 0 0 3px rgba(31,61,43,0.1)" : "none",
+                      }}
+                    />
+                  </div>
 
+                  {/* Email */}
+                  <div>
+                    <label className="text-[12.5px] font-medium mb-1.5 block" style={{ color: colors.ink }}>
+                      Email Address
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                      onFocus={() => setFocusedField("email")}
+                      onBlur={() => setFocusedField(null)}
+                      placeholder="you@example.com"
+                      className="w-full px-4 py-3 rounded-xl text-[14px] outline-none border transition-all"
+                      style={{
+                        borderColor: focusedField === "email" ? colors.forest : "rgba(0,0,0,0.1)",
+                        boxShadow: focusedField === "email" ? "0 0 0 3px rgba(31,61,43,0.1)" : "none",
+                      }}
+                    />
+                  </div>
+
+                  {/* Message */}
                   <div>
                     <label className="text-[12.5px] font-medium mb-1.5 block" style={{ color: colors.ink }}>
                       Message
@@ -212,10 +222,10 @@ export default function ContactPage(): JSX.Element {
                       onFocus={() => setFocusedField("message")}
                       onBlur={() => setFocusedField(null)}
                       placeholder="Tell us what you need..."
-                      className="contact-input w-full px-4 py-3 rounded-xl text-[14px] outline-none border resize-none"
+                      className="w-full px-4 py-3 rounded-xl text-[14px] outline-none border resize-none transition-all"
                       style={{
                         borderColor: focusedField === "message" ? colors.forest : "rgba(0,0,0,0.1)",
-                        boxShadow: focusedField === "message" ? `0 0 0 3px rgba(31,61,43,0.1)` : "none",
+                        boxShadow: focusedField === "message" ? "0 0 0 3px rgba(31,61,43,0.1)" : "none",
                       }}
                     />
                   </div>
@@ -236,6 +246,6 @@ export default function ContactPage(): JSX.Element {
           </motion.div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
