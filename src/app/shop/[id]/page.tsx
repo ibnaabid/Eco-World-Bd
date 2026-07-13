@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import WhatsAppButton from "@/app/Whatsapp/page";
 import CartContent from "./BuyBtn";
+import { auth } from "@/app/lib/auth";
+import { headers } from "next/headers";
 
 interface Product {
   _id: string;
@@ -31,8 +33,16 @@ interface PageProps {
 const Page = async ({ params }: PageProps) => {
   const { id } = await params;
 
+  // 🎯 এখানে headers() পাস করতে হবে এবং এটি একটি async ফাংশন হওয়ায় await করতে হবে
+  const token = await auth.api.getToken({
+    headers: await headers()
+  });
+
   const res = await fetch(`http://localhost:5000/products/${id}`, {
     cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${token?.token}`,
+    },
   });
 
   const product: Product = await res.json();

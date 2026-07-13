@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Trash2, Heart, Package } from "lucide-react";
 import toast from "react-hot-toast";
+import { authClient } from "@/app/lib/auth-client";
 
 interface Favourite {
   _id: string;
@@ -20,9 +21,16 @@ export default function FavouritePage() {
   const [loading, setLoading] = useState(true);
 
   const loadFavourite = async () => {
+    
+          const {data:token} = await authClient.token();
+          console.log(token)
+
     try {
       const res = await fetch("http://localhost:5000/favourite", {
         cache: "no-store",
+        headers: {
+    Authorization: `Bearer ${token?.token}`,
+  },
       });
       const data = await res.json();
       setItems(data);
@@ -39,11 +47,18 @@ export default function FavouritePage() {
   }, []);
 
   const handleDelete = async (id: string) => {
+      const {data:token} = await authClient.token();
+          console.log(token)
+          
     if (!confirm("Remove this item from favourites?")) return;
 
     try {
       const res = await fetch(`http://localhost:5000/favourite/${id}`, {
-        method: "DELETE",
+        method: "DELETE",   
+         headers: {
+    Authorization: `Bearer ${token?.token}`,
+  },
+
       });
 
       const data = await res.json();

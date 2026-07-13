@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FavouriteButton from "./Favorite";
 import ProductFilter from "../FilterShop/FilterPage";
+import { authClient } from "../lib/auth-client";
 
 const colors = {
   forest: "#16301F",
@@ -41,11 +42,21 @@ export default function ProductsPage() {
   const [sort, setSort] = useState("");
 
   useEffect(() => {
+
     const getProducts = async () => {
+
+      const {data:token} = await authClient.token();
+      console.log(token)
+
       try {
         const res = await fetch("http://localhost:5000/products", {
           cache: "no-store",
-        });
+            headers: {
+    Authorization: `Bearer ${token?.token}`,
+  },
+        },
+  
+      );
         if (!res.ok) throw new Error("ডেটা লোড করতে ব্যর্থ হয়েছে!");
         const data = await res.json();
         setProducts(data);

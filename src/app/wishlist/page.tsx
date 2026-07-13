@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart, Bell, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+// import { headers } from "next/headers";
+import { authClient } from "../lib/auth-client";
 
 // API থেকে আসা ডেটার টাইপ ডিফাইন
 interface WishlistItem {
@@ -21,8 +24,17 @@ export default function FavoritesPage() {
   // 🌍 ১. আপনার API থেকে ডেটা নিয়ে আসা (Fetch)
   useEffect(() => {
     async function fetchFavorites() {
+         const {data:token} = await authClient.token();
+            console.log(token)
+      
       try {
-        const res = await fetch("http://localhost:5000/favourite");
+        const res = await fetch("http://localhost:5000/favourite",{
+                       headers: {
+    Authorization: `Bearer ${token?.token}`,
+  }
+        }
+    
+        );
         if (!res.ok) throw new Error("ডেটা লোড করতে ব্যর্থ হয়েছে!");
         
         const data = await res.json();
@@ -96,9 +108,11 @@ export default function FavoritesPage() {
               <div>
                 {/* ইমেজ কন্টেইনার */}
                 <div className="relative w-full h-40 bg-gray-50 rounded-xl overflow-hidden mb-4">
-                  <img 
+                  <Image
+                  height={80}
+                  width={90} 
                     src={item.image || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd"} // ইমেজ না থাকলে ফলব্যাক ইমেজ
-                    alt={item.name} 
+                    alt={item.name || "logo"} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                   />
                   

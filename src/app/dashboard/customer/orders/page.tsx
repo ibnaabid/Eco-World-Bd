@@ -17,6 +17,7 @@ interface Order {
   orderStatus: string;
   paymentStatus: string;
   createdAt: string;
+  customerName:string;
   items: OrderItem[];
 }
 
@@ -96,9 +97,12 @@ export default function MyOrdersPage() {
               <thead className="bg-gradient-to-r from-emerald-700 to-teal-700 text-white sticky top-0">
                 <tr>
                   <th className="py-6 px-8 text-left">Order ID</th>
+
                   <th className="py-6 px-6 text-left">Items</th>
                   <th className="py-6 px-8 text-right">Amount</th>
                   <th className="py-6 px-6 text-center">Status</th>
+                  
+                  <th className="py-6 px-6 text-center">Name</th>
                   <th className="py-6 px-8 text-right">Date</th>
                   <th className="py-6 px-6 text-center">Action</th>
                 </tr>
@@ -122,6 +126,13 @@ export default function MyOrdersPage() {
                     <td className="py-6 px-6 text-center">
                       <span className={`px-5 py-2 rounded-full text-sm font-medium ${order.orderStatus === "Confirmed" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
                         {order.orderStatus}
+                      </span>
+                    </td>
+
+                    
+                      <td className="py-6 px-6 text-center">
+                      <span className={`px-5 py-2 rounded-full text-sm font-medium ${order.orderStatus === "Confirmed" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
+                        {order?.customerName}
                       </span>
                     </td>
 
