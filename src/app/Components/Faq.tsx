@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState } from "react";
 import { Plus } from "lucide-react";
 
@@ -44,80 +45,94 @@ const faqs: FAQItem[] = [
   },
 ];
 
-function FAQRow({ item, isOpen, onClick }: { item: FAQItem; isOpen: boolean; onClick: () => void }): JSX.Element {
+function FAQRow({ item, isOpen, onClick }: { item: FAQItem; isOpen: boolean; onClick: () => void }) {
   return (
-    <div className="border-b" style={{ borderColor: "rgba(31,61,43,0.1)" }}>
+    <div className="border-b transition-all duration-300" style={{ borderColor: "rgba(31,61,43,0.08)" }}>
       <button
         onClick={onClick}
-        className="w-full flex items-center justify-between gap-6 py-6 text-left"
+        className="w-full flex items-center justify-between gap-6 py-7 text-left group"
       >
         <span
-          className="text-[15.5px] sm:text-[16.5px] font-medium transition-colors"
+          className="text-[16px] md:text-[17px] font-medium tracking-tight transition-colors duration-300 group-hover:text-[#1F3D2B]"
           style={{ color: isOpen ? colors.forest : colors.ink }}
         >
           {item.question}
         </span>
         <span
-          className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+          className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300"
           style={{
-            backgroundColor: isOpen ? colors.forest : "rgba(31,61,43,0.06)",
-            color: isOpen ? colors.cream : colors.forest,
+            backgroundColor: isOpen ? colors.forest : "transparent",
+            color: isOpen ? colors.cream : colors.ink,
             transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
           }}
         >
-          <Plus size={15} strokeWidth={2.2} />
+          <Plus size={16} strokeWidth={1.5} />
         </span>
       </button>
+      
+      {/* Pure CSS Smooth Height Dynamic Animation */}
       <div
-        className="overflow-hidden transition-all duration-300 ease-in-out"
-        style={{ maxHeight: isOpen ? 200 : 0 }}
+        className={`grid transition-all duration-300 ease-in-out ${
+          isOpen ? "grid-rows-[1fr] opacity-100 pb-7" : "grid-rows-[0fr] opacity-0"
+        }`}
       >
-        <p className="pb-6 pr-10 text-[14px] leading-relaxed" style={{ color: "rgba(42,42,34,0.65)" }}>
-          {item.answer}
-        </p>
+        <div className="overflow-hidden">
+          <p className="pr-10 text-[14px] leading-relaxed font-light text-stone-500">
+            {item.answer}
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
-export default function FAQSection(): JSX.Element {
+export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number>(0);
 
   return (
-    <section className="py-20 px-5 md:px-8" style={{ backgroundColor: "#FFFFFF", fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+    <section className="py-28 px-6 md:px-16" style={{ backgroundColor: "#FFFFFF", fontFamily: "'Inter', sans-serif" }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
-      `}</style>
+      `}} />
 
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <span className="text-[12px] font-semibold tracking-[0.15em] uppercase" style={{ color: colors.moss }}>
-            Questions
-          </span>
-          <h2 className="brand-font text-3xl md:text-4xl mt-2" style={{ color: colors.ink }}>
-            Frequently Asked
-          </h2>
-        </div>
-
-        <div>
-          {faqs.map((item, i) => (
-            <FAQRow
-              key={i}
-              item={item}
-              isOpen={openIndex === i}
-              onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
-            />
-          ))}
-        </div>
-
-        <div className="text-center mt-10">
-          <p className="text-[13.5px]" style={{ color: "rgba(42,42,34,0.6)" }}>
-            Still have questions?{" "}
-            <a href="#" className="font-semibold" style={{ color: colors.forest }}>
-              Contact our support team
+      <div className="max-w-7xl mx-auto">
+        {/* Split Layout Container */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+          
+          {/* Left Side Header (Stays sticky on large screens) */}
+          <div className="lg:col-span-4 lg:sticky lg:top-10 h-fit">
+            <span className="text-[11px] font-medium tracking-[0.25em] uppercase block mb-3" style={{ color: colors.moss }}>
+              Customer Support
+            </span>
+            <h2 className="brand-font text-4xl font-medium tracking-tight leading-tight mb-6" style={{ color: colors.ink }}>
+              Frequently <br />
+              <span className="italic font-normal">Asked Questions</span>
+            </h2>
+            <p className="text-[14px] text-stone-500 font-light leading-relaxed mb-6 max-w-sm">
+              Can't find what you're looking for? Our dedicated concierge team is always here to assist with custom orders.
+            </p>
+            <a 
+              href="#" 
+              className="inline-flex items-center text-[13px] font-medium tracking-wide uppercase pb-0.5 border-b transition-all duration-300 hover:opacity-70"
+              style={{ color: colors.forest, borderColor: colors.forest }}
+            >
+              Contact Support Team
             </a>
-          </p>
+          </div>
+
+          {/* Right Side Accordion Grid */}
+          <div className="lg:col-span-8 border-t" style={{ borderColor: "rgba(31,61,43,0.08)" }}>
+            {faqs.map((item, i) => (
+              <FAQRow
+                key={i}
+                item={item}
+                isOpen={openIndex === i}
+                onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
+              />
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
