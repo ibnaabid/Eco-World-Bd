@@ -38,7 +38,7 @@ const loggedOutLinks: NavLink[] = [
   { label: "Register", href: "/register", variant: "button" },
 ];
 
-export default function BambooNavbar(): JSX.Element {
+export default function BambooNavbar() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Home");
@@ -67,7 +67,6 @@ export default function BambooNavbar(): JSX.Element {
     { label: "About", href: "/about" },
   ];
 
-  // ডায়নামিক্যালি লিংক জেনারেট করা হচ্ছে সেশনের ওপর ভিত্তি করে
   const links: NavLink[] = isLoggedIn
     ? [
         ...loggedInLinks,
@@ -238,7 +237,6 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
 
   return (
     <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-      {/* Cart Button */}
       <button aria-label="Cart" className="relative p-2 rounded-full transition-colors hover:bg-white/5">
         <ShoppingBasket size={17} color={cream} strokeWidth={1.8} />
         {cartCount > 0 && (
@@ -251,7 +249,6 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
         )}
       </button>
 
-      {/* Auth Links */}
       {!isPending &&
         actionLinks.map((link) => {
           if (link.label === "Logout") {
@@ -368,7 +365,6 @@ function MobileDropdown({
     >
       <div ref={panelRef} className="px-5 pb-6 pt-3">
         <div className="max-w-[1500px] mx-auto flex flex-col">
-          {/* Plain Links */}
           {!isPending &&
             plainLinks.map((link, i) => (
               <div key={link.label}>
@@ -389,9 +385,7 @@ function MobileDropdown({
               </div>
             ))}
 
-          {/* Mobile Actions */}
           <div className="flex items-center gap-3 mt-5">
-            {/* Cart */}
             <button
               className="p-2.5 rounded-full relative shrink-0"
               style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
@@ -407,7 +401,6 @@ function MobileDropdown({
               )}
             </button>
 
-            {/* Action Buttons */}
             {!isPending &&
               actionLinks.map((link) => {
                 if (link.label === "Logout") {
