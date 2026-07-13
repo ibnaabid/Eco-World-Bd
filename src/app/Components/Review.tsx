@@ -22,7 +22,7 @@ export default function CustomerReviewsSection() {
   // Replace with your actual API endpoint
   const fetchReviews = async () => {
     try {
-      const res = await fetch("http://localhost:5000/reviews", {
+      const res = await fetch("https://eco-world-backend.vercel.app/reviews", {
         cache: "no-store",
       });
       const data = await res.json();

@@ -19,7 +19,7 @@ export default function DeleteProductDialog({
   const handleDelete = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/products/${product._id}`,
+        `https://eco-world-backend.vercel.app/products/${product._id}`,
         { method: "DELETE" }
       );
 

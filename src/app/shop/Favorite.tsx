@@ -39,7 +39,7 @@ export default function FavouriteButton({ product }: Props) {
         pickupAddress: product.pickupAddress,
       };
 
-      const res = await fetch("http://localhost:5000/favourite", {
+      const res = await fetch("https://eco-world-backend.vercel.app/favourite", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

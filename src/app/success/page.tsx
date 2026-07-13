@@ -26,7 +26,7 @@ function SuccessContent() {
       return;
     }
 
-    fetch("http://localhost:5000/orders", {
+    fetch("https://eco-world-backend.vercel.app/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -37,7 +37,7 @@ export default function MyOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/orders?email=${userEmail}`);
+      const res = await fetch(`https://eco-world-backend.vercel.app/orders?email=${userEmail}`);
       const data = await res.json();
       setOrders(data);
     } catch (err) {
@@ -53,7 +53,7 @@ export default function MyOrdersPage() {
     setDeletingId(orderId);
 
     try {
-      const res = await fetch(`http://localhost:5000/orders/${orderId}`, {
+      const res = await fetch(`https://eco-world-backend.vercel.app/orders/${orderId}`, {
         method: "DELETE",
       });
 

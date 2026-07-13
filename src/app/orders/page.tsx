@@ -27,7 +27,7 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/orders")
+    fetch("https://eco-world-backend.vercel.app/orders")
       .then((res) => res.json())
       .then((data) => {
         setOrders(Array.isArray(data) ? data : []);

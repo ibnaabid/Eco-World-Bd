@@ -43,7 +43,7 @@ const EditBtn: React.FC<EditBtnProps> = ({ product }) => {
   const handleUpdate = async () => {
     setIsSaving(true);
     try {
-      const res = await fetch(`http://localhost:5000/products/${product._id}`, {
+      const res = await fetch(`https://eco-world-backend.vercel.app/products/${product._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -26,7 +26,7 @@ export default function FavouritePage() {
           console.log(token)
 
     try {
-      const res = await fetch("http://localhost:5000/favourite", {
+      const res = await fetch("https://eco-world-backend.vercel.app/favourite", {
         cache: "no-store",
         headers: {
     Authorization: `Bearer ${token?.token}`,
@@ -53,7 +53,7 @@ export default function FavouritePage() {
     if (!confirm("Remove this item from favourites?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/favourite/${id}`, {
+      const res = await fetch(`https://eco-world-backend.vercel.app/favourite/${id}`, {
         method: "DELETE",   
          headers: {
     Authorization: `Bearer ${token?.token}`,

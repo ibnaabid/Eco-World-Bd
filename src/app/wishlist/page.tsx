@@ -28,7 +28,7 @@ export default function FavoritesPage() {
             console.log(token)
       
       try {
-        const res = await fetch("http://localhost:5000/favourite",{
+        const res = await fetch("https://eco-world-backend.vercel.app/favourite",{
                        headers: {
     Authorization: `Bearer ${token?.token}`,
   }

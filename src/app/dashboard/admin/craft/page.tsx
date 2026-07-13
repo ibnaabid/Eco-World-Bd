@@ -20,7 +20,7 @@ const Page = async () => {
     headers: await headers()
   });
 
-  const res = await fetch("http://localhost:5000/products", { 
+  const res = await fetch("https://eco-world-backend.vercel.app/products", { 
     cache: "no-store",
     headers: {
       Authorization: `Bearer ${token?.token}`,

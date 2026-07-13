@@ -74,7 +74,7 @@ export default function AddProduct() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/products", {
+      const res = await fetch("https://eco-world-backend.vercel.app/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
