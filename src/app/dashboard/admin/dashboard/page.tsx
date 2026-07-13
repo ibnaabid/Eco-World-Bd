@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 import { User, Calendar, ShieldCheck, Sparkles, TrendingUp, ShoppingBag, DollarSign, ArrowUpRight } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client";
-// import { authClient } from "../lib/auth-client";
 
-// লাক্সারি থিম কালার প্যালেট
 const colors = {
   bgPremiumDark: "#0D1B12", 
   cardDark: "#132519",       
@@ -15,7 +13,7 @@ const colors = {
 };
 
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);     // ← Fixed: Proper typing
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +40,6 @@ export default function DashboardPage() {
     );
   }
 
-  // চার্টের জন্য মক ডেটা (Eco World Sales Analytics)
   const salesData = [
     { month: "Jan", sales: 45 },
     { month: "Feb", sales: 52 },
@@ -69,7 +66,7 @@ export default function DashboardPage() {
         <div className="z-10">
           <div className="flex items-center gap-2.5 mb-2">
             <h1 className="brand-font text-2xl sm:text-3xl font-semibold tracking-wide" style={{ color: colors.cream }}>
-            Hey, Whats going on!👋
+              Hey, Whats going on!👋
             </h1>
             <Sparkles size={20} className="animate-pulse" style={{ color: colors.bambooTan }} />
           </div>
@@ -90,7 +87,6 @@ export default function DashboardPage() {
 
       {/* 📊 QUICK STATS CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Total Revenue */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center justify-between shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03]">
@@ -106,7 +102,6 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Total Orders */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center justify-between shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03]">
@@ -122,7 +117,6 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* Live Session Date */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03]">
             <Calendar size={20} style={{ color: colors.bambooTan }} />
@@ -153,29 +147,24 @@ export default function DashboardPage() {
           </span>
         </div>
 
-        {/* SVG Area Chart Graph */}
         <div className="relative w-full h-48 sm:h-60 mt-2">
           <svg className="w-full h-full" viewBox="0 0 700 200" preserveAspectRatio="none">
             <defs>
-              {/* চার্টের ভেতরের স্মুথ গ্রেডিয়েন্ট */}
               <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={colors.bambooTan} stopOpacity="0.25" />
                 <stop offset="100%" stopColor={colors.bambooTan} stopOpacity="0.0" />
               </linearGradient>
             </defs>
 
-            {/* Horizontal Grid Lines */}
             <line x1="0" y1="50" x2="700" y2="50" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
             <line x1="0" y1="100" x2="700" y2="100" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
             <line x1="0" y1="150" x2="700" y2="150" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
 
-            {/* Area Fill */}
             <path
               d="M 0 160 L 100 140 L 200 145 L 300 110 L 400 120 L 500 80 L 700 40 L 700 200 L 0 200 Z"
               fill="url(#chartGradient)"
             />
 
-            {/* Main Spline Line */}
             <path
               d="M 0 160 L 100 140 L 200 145 L 300 110 L 400 120 L 500 80 L 700 40"
               fill="none"
@@ -184,7 +173,6 @@ export default function DashboardPage() {
               strokeLinecap="round"
             />
 
-            {/* Interactive Glowing Data Dots */}
             <circle cx="100" cy="140" r="4" fill={colors.cream} stroke={colors.bambooTan} strokeWidth="2" />
             <circle cx="300" cy="110" r="4" fill={colors.cream} stroke={colors.bambooTan} strokeWidth="2" />
             <circle cx="500" cy="80" r="4" fill={colors.cream} stroke={colors.bambooTan} strokeWidth="2" />
@@ -193,7 +181,6 @@ export default function DashboardPage() {
           </svg>
         </div>
 
-        {/* X-Axis Labels */}
         <div className="flex justify-between text-[11px] font-medium text-white/30 px-1 border-t border-white/5 pt-3">
           {salesData.map((data, idx) => (
             <span key={idx} className="hover:text-white transition-colors">{data.month}</span>
