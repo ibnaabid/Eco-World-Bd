@@ -1,181 +1,135 @@
 "use client";
 
-import { useState } from "react";
-import { Settings, User, Sliders, Database, Save, RefreshCw, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  User,
+  Calendar,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { authClient } from "../../lib/auth-client";
 
 const colors = {
+  bgPremiumDark: "#0D1B12",
   cardDark: "#132519",
   bambooTan: "#C9A876",
-  cream: "#F6F2E9",
-  moss: "#6B8F5C"
+  moss: "#6B8F5C",
+  cream: "#F6F2E9"
 };
 
-export default function PanelSettings() {
-  const [storeName, setStoreName] = useState("Eco World Handicraft");
-  const [currency, setCurrency] = useState("BDT (৳)");
-  const [lowStockAlert, setLowStockAlert] = useState(5);
-  const [backupLoading, setBackupLoading] = useState(false);
+interface SessionUser {
+  name?: string;
+  email?: string;
+  image?: string | null;     // ← Fixed: Allow null
+  role?: string;
+}
 
-  const handleSaveSettings = (e) => {
-    e.preventDefault();
-    console.log({ storeName, currency, lowStockAlert });
-    alert("Settings updated successfully, Mama!");
-  };
+export default function DashboardGreetings() {
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const triggerBackup = () => {
-    setBackupLoading(true);
-    setTimeout(() => {
-      setBackupLoading(false);
-      alert("Database backup downloaded successfully!");
-    }, 1500);
-  };
+  useEffect(() => {
+    async function loadUser() {
+      try {
+        const session = await authClient.getSession();
+        if (session?.data?.user) {
+          setUser(session.data.user);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-[40vh] flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg" style={{ color: colors.bambooTan }}></span>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full max-w-4xl mx-auto animate-fade-in space-y-6 text-sm">
+    <div className="w-full flex flex-col gap-6 animate-fade-in" style={{ fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
       `}</style>
 
-      {/* ⚙️ HEADER SECTION */}
-      <div className="flex items-center gap-3 mb-2">
-        <div className="p-2 rounded-xl bg-white/5">
-          <Settings size={24} style={{ color: colors.bambooTan }} />
+      {/* 🌟 PREMIUM HERO GREETINGS CARD */}
+      <div 
+        className="rounded-3xl p-8 sm:p-10 border border-white/[0.04] shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6"
+        style={{ backgroundColor: colors.cardDark }}
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9A876]/[0.03] blur-[80px] rounded-full pointer-events-none" />
+
+        <div className="z-10">
+          <div className="flex items-center gap-2.5 mb-3">
+            <h1 className="brand-font text-2xl sm:text-3xl font-semibold tracking-wide" style={{ color: colors.cream }}>
+              Hey,Bro , Hope Doing well! 👋
+            </h1>
+            <Sparkles size={20} className="animate-pulse" style={{ color: colors.bambooTan }} />
+          </div>
+
+          <h2 className="text-xl font-medium opacity-90" style={{ color: colors.bambooTan }}>
+            Welcome Back, {user?.name || "Admin Mama"}
+          </h2>
+
+          <p className="text-sm text-white/50 mt-2 max-w-xl leading-relaxed">
+            Manage your Eco World Handicraft store efficiently. Monitor your core business performance, chat system, and manage products seamlessly.
+          </p>
         </div>
-        <div>
-          <h1 className="brand-font text-2xl sm:text-3xl font-semibold text-[#F6F2E9]">
-            Panel Settings
-          </h1>
-          <p className="text-[11px] text-white/40 mt-0.5">Configure your Eco World administrative control engine</p>
+
+        <div className="shrink-0 z-10 bg-white/[0.03] border border-white/[0.06] px-5 py-3 rounded-2xl md:text-center min-w-[140px]">
+          <p className="text-[10px] text-white/30 uppercase tracking-widest mb-0.5 font-bold">Access Level</p>
+          <p className="text-[14px] font-bold capitalize" style={{ color: colors.bambooTan }}>
+            {user?.role || "Super Admin"}
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 📊 INFOGRAPHIC DATA MINI CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
-        {/* 🛠️ LEFT SIDEBAR: QUICK NAVIGATION OR SYSTEM INFO */}
-        <div className="md:col-span-1 space-y-4">
-          <div className="rounded-2xl p-5 border border-white/[0.04] space-y-4" style={{ backgroundColor: colors.cardDark }}>
-            <h3 className="font-semibold text-white/80 flex items-center gap-2">
-              <Sliders size={16} style={{ color: colors.bambooTan }} /> System Info
-            </h3>
-            <div className="space-y-2 text-[12px] text-white/50">
-              <div className="flex justify-between border-b border-white/5 pb-1.5">
-                <span>Environment</span>
-                <span className="text-emerald-400 font-medium">Production</span>
-              </div>
-              <div className="flex justify-between border-b border-white/5 pb-1.5">
-                <span>Next.js Version</span>
-                <span className="text-white/80">16.2.10</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Auth System</span>
-                <span className="text-[#C9A876]">Better-Auth</span>
-              </div>
-            </div>
+        <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03] text-white/70">
+            <User size={20} style={{ color: colors.bambooTan }} />
           </div>
-
-          {/* DATABASE BACKUP WIDGET */}
-          <div className="rounded-2xl p-5 border border-white/[0.04] space-y-3" style={{ backgroundColor: colors.cardDark }}>
-            <h3 className="font-semibold text-white/80 flex items-center gap-2">
-              <Database size={16} style={{ color: colors.bambooTan }} /> Data Control
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] text-white/30 uppercase tracking-wider font-bold">Admin Email</p>
+            <h3 className="font-medium text-[13.5px] truncate mt-0.5" style={{ color: colors.cream }}>
+              {user?.email || "admin@ecoworld.com"}
             </h3>
-            <p className="text-[11px] text-white/40 leading-relaxed">
-              Download a complete snapshot of your products, orders, and system logs.
-            </p>
-            <button
-              onClick={triggerBackup}
-              disabled={backupLoading}
-              className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 font-medium text-[12px] flex items-center justify-center gap-2 border border-white/5 transition-all active:scale-[0.98]"
-            >
-              <RefreshCw size={14} className={backupLoading ? "animate-spin text-[#C9A876]" : ""} />
-              {backupLoading ? "Generating Backup..." : "Backup Database"}
-            </button>
           </div>
         </div>
 
-        {/* 📝 RIGHT SIDE: CORE CONFIGURATION FORM */}
-        <div className="md:col-span-2">
-          <form onSubmit={handleSaveSettings} className="rounded-3xl p-6 sm:p-8 border border-white/[0.04] shadow-2xl space-y-6" style={{ backgroundColor: colors.cardDark }}>
-            
-            {/* Section 1: Store Configurations */}
-            <div className="space-y-4">
-              <h3 className="text-[15px] font-semibold tracking-wide border-b border-white/5 pb-2 text-[#F6F2E9]">
-                Store Details
-              </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-white/60 font-medium mb-1.5">Store Global Name</label>
-                  <input 
-                    type="text" 
-                    value={storeName}
-                    onChange={(e) => setStoreName(e.target.value)}
-                    className="w-full bg-black/10 border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-2.5 text-white outline-none transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-white/60 font-medium mb-1.5">Display Currency</label>
-                  <input 
-                    type="text" 
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full bg-black/10 border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-2.5 text-white outline-none transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Section 2: Notifications & Inventory Guardrails */}
-            <div className="space-y-4 pt-2">
-              <h3 className="text-[15px] font-semibold tracking-wide border-b border-white/5 pb-2 text-[#F6F2E9]">
-                Inventory Guardrails
-              </h3>
-              
-              <div>
-                <label className="block text-white/60 font-medium mb-1.5">Low Stock Alert Threshold</label>
-                <div className="flex items-center gap-3">
-                  <input 
-                    type="number" 
-                    value={lowStockAlert}
-                    onChange={(e) => setLowStockAlert(e.target.value)}
-                    className="w-32 bg-black/10 border border-white/5 focus:border-[#C9A876]/30 rounded-xl px-4 py-2.5 text-white outline-none transition-all"
-                  />
-                  <span className="text-white/30 text-[12px]">Alert will trigger when product quantity falls below this number.</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Section 3: Theme Preference Preview */}
-            <div className="space-y-4 pt-2">
-              <h3 className="text-[15px] font-semibold tracking-wide border-b border-white/5 pb-2 text-[#F6F2E9]">
-                Appearance Theme
-              </h3>
-              <div className="p-4 rounded-xl bg-black/20 border border-white/[0.03] flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-white/80">Eco Luxury Dark Theme</p>
-                  <p className="text-[11px] text-white/30 mt-0.5">Currently forced via global panel configuration overrides.</p>
-                </div>
-                <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider text-[#C9A876] bg-[#C9A876]/10 border border-[#C9A876]/20 uppercase">
-                  Active
-                </span>
-              </div>
-            </div>
-
-            {/* SAVE BUTTON */}
-            <div className="pt-2">
-              <button 
-                type="submit"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl text-black font-semibold text-[13.5px] flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition-all ml-auto"
-                style={{ backgroundColor: colors.bambooTan }}
-              >
-                <Save size={16} />
-                Save Changes
-              </button>
-            </div>
-
-          </form>
+        <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03]">
+            <ShieldCheck size={20} className="text-emerald-500" />
+          </div>
+          <div>
+            <p className="text-[11px] text-white/30 uppercase tracking-wider font-bold">System Status</p>
+            <h3 className="font-semibold text-[13.5px] mt-0.5 text-emerald-400 flex items-center gap-1">
+              Verified Guardrail Secure
+            </h3>
+          </div>
         </div>
 
+        <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03] text-white/70">
+            <Calendar size={20} style={{ color: colors.bambooTan }} />
+          </div>
+          <div>
+            <p className="text-[11px] text-white/30 uppercase tracking-wider font-bold">Today's Session</p>
+            <h3 className="font-semibold text-[13.5px] mt-0.5" style={{ color: colors.cream }}>
+              {new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            </h3>
+          </div>
+        </div>
       </div>
     </div>
   );
