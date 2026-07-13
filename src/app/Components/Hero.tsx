@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight, Leaf } from "lucide-react";
 import Image from "next/image";
@@ -13,7 +13,6 @@ const colors = {
   ochre: "#B8863B",
 };
 
-// Fixed paths: assuming these images sit directly inside your 'public' folder
 const slides = [
   {
     image: "/sam-bhattacharyya-Jau8u_R9deo-unsplash.jpg",
@@ -25,6 +24,7 @@ const slides = [
   },
   {
     image: "/WhatsApp Image 2026-07-09 at 15.14.30.jpeg",
+    label: "Home Decor",
   },
   {
     image: "/WhatsApp Image 2026-07-09 at 15.14.25.jpeg",
@@ -32,7 +32,7 @@ const slides = [
   },
 ];
 
-export default function BambooHero(): JSX.Element {
+export default function BambooHero() {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -48,16 +48,22 @@ export default function BambooHero(): JSX.Element {
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
+      <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=Inter:wght@400;500;600&display=swap');
-        .brand-font { font-family: 'Fraunces', serif; }
+
+        .brand-font {
+          font-family: 'Fraunces', serif;
+        }
+
         .slide-img {
           opacity: 0;
           transition: opacity 1s ease;
         }
+
         .slide-img.show {
           opacity: 1;
         }
+
         .dot {
           transition: width 0.3s ease, background 0.3s ease;
         }
@@ -65,24 +71,28 @@ export default function BambooHero(): JSX.Element {
 
       <section
         className="relative w-full overflow-hidden"
-        style={{ height: "65vh", minHeight: 460, backgroundColor: colors.forest }}
+        style={{
+          height: "65vh",
+          minHeight: "460px",
+          backgroundColor: colors.forest,
+        }}
       >
         {/* Slides */}
         <div className="absolute inset-0">
-          {slides.map((s, i) => (
+          {slides.map((slide, i) => (
             <Image
               key={i}
-              src={s.image}
-              alt={s.label || "Bamboo craft product"}
+              src={slide.image}
+              alt={slide.label || "Bamboo craft product"}
               fill
-              priority={i === 0} // Loads the first image instantly
+              priority={i === 0}
               sizes="100vw"
-              className={`slide-img object-cover ${
-                i === active ? "show" : ""
-              }`}
+              className={`slide-img object-cover ${i === active ? "show" : ""}`}
+              style={{ objectPosition: "center" }}
             />
           ))}
-          {/* Forest tint overlay for text readability */}
+
+          {/* Forest tint overlay */}
           <div
             className="absolute inset-0"
             style={{
@@ -93,7 +103,7 @@ export default function BambooHero(): JSX.Element {
         </div>
 
         {/* Content */}
-        <div className="relative h-full max-w-7xl mx-auto px-5 md:px-8 flex items-center">
+        <div className="relative h-full max-w-7xl mx-auto px-5 md:px-8 flex items-center z-10">
           <div className="max-w-xl">
             <div
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-5 text-[12px] font-medium tracking-wide"
@@ -124,15 +134,16 @@ export default function BambooHero(): JSX.Element {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/shop"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-6 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:-translate-y-0.5 active:scale-95"
                 style={{ backgroundColor: colors.ochre, color: colors.cream }}
               >
                 Explore Products
                 <ArrowRight size={16} strokeWidth={2} />
               </Link>
+
               <Link
                 href="/blog"
-                className="px-6 py-3.5 rounded-full text-[14px] font-semibold border transition-colors hover:bg-white/5"
+                className="px-6 py-3.5 rounded-full text-[14px] font-semibold border transition-colors hover:bg-white/10"
                 style={{ borderColor: "rgba(246,242,233,0.35)", color: colors.cream }}
               >
                 Meet the Artisans
@@ -141,34 +152,35 @@ export default function BambooHero(): JSX.Element {
           </div>
         </div>
 
-        {/* Slide label, bottom-left */}
+        {/* Slide label */}
         <div
-          className="absolute bottom-7 left-5 md:left-8 text-[12px] tracking-[0.15em] uppercase font-medium"
+          className="absolute bottom-7 left-5 md:left-8 text-[12px] tracking-[0.15em] uppercase font-medium z-10"
           style={{ color: colors.bambooTan }}
         >
           {slides[active].label || "Home Decor"}
         </div>
 
-        {/* Arrows */}
+        {/* Navigation Arrows */}
         <button
           onClick={prev}
           aria-label="Previous slide"
-          className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-white/10"
+          className="hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-white/10 active:bg-white/20 z-20"
           style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
         >
           <ChevronLeft size={20} color={colors.cream} />
         </button>
+
         <button
           onClick={next}
           aria-label="Next slide"
-          className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-white/10"
+          className="hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-white/10 active:bg-white/20 z-20"
           style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
         >
           <ChevronRight size={20} color={colors.cream} />
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-7 right-5 md:right-8 flex items-center gap-2">
+        <div className="absolute bottom-7 right-5 md:right-8 flex items-center gap-2 z-20">
           {slides.map((_, i) => (
             <button
               key={i}
@@ -177,8 +189,7 @@ export default function BambooHero(): JSX.Element {
               className="dot h-1.5 rounded-full"
               style={{
                 width: i === active ? 26 : 8,
-                backgroundColor:
-                  i === active ? colors.bambooTan : "rgba(246,242,233,0.4)",
+                backgroundColor: i === active ? colors.bambooTan : "rgba(246,242,233,0.4)",
               }}
             />
           ))}

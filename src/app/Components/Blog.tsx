@@ -1,6 +1,8 @@
+import React from "react";
 import { ArrowUpRight, Clock } from "lucide-react";
 import Image from "next/image";
 
+// ২. পিওর ডাটা অবজেক্ট (কোনো JSX উপাদান নেই)
 const colors = {
   forest: "#1F3D2B",
   moss: "#6B8F5C",
@@ -29,7 +31,7 @@ const posts: BlogPost[] = [
     date: "Jun 18, 2026",
     readTime: "4 min read",
     category: "Sustainability",
-    image:"/sam-bhattacharyya-Jau8u_R9deo-unsplash.jpg"
+    image: "/sam-bhattacharyya-Jau8u_R9deo-unsplash.jpg"
   },
   {
     id: 2,
@@ -39,7 +41,7 @@ const posts: BlogPost[] = [
     date: "Jun 05, 2026",
     readTime: "6 min read",
     category: "Artisans",
-    image:"/WhatsApp Image 2026-07-09 at 15.14.35.jpeg"
+    image: "/WhatsApp Image 2026-07-09 at 15.14.35.jpeg"
   },
   {
     id: 3,
@@ -49,17 +51,17 @@ const posts: BlogPost[] = [
     date: "May 22, 2026",
     readTime: "3 min read",
     category: "Guides",
-    image:"/minh-triet-c5TYG4b2QvI-unsplash.jpg"
+    image: "/minh-triet-c5TYG4b2QvI-unsplash.jpg"
   },
 ];
 
 export default function BlogSection(): JSX.Element {
   return (
     <section className="py-20 px-5 md:px-8" style={{ backgroundColor: colors.cream, fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
-      `}</style>
+      `}} />
 
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
@@ -90,8 +92,8 @@ export default function BlogSection(): JSX.Element {
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <Image
-                height={500}
-                width={500}
+                  height={500}
+                  width={500}
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

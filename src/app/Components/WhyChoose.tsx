@@ -1,6 +1,8 @@
-import { Leaf, Hammer, Truck, ShieldCheck } from "lucide-react";
+import React from "react";
+import { Leaf, Hammer, Truck, ShieldCheck, LucideIcon } from "lucide-react";
 import Image from "next/image";
 
+// ১. পিওর ডাটা অবজেক্ট (কোনো JSX উপাদান নেই)
 const colors = {
   forest: "#1F3D2B",
   moss: "#6B8F5C",
@@ -10,38 +12,46 @@ const colors = {
   ink: "#2A2A22",
 };
 
-interface Reason {
-  icon: React.ReactNode;
+interface ReasonData {
+  iconKey: "leaf" | "hammer" | "truck" | "shield";
   title: string;
   description: string;
 }
 
-const reasons: Reason[] = [
+const reasons: ReasonData[] = [
   {
-    icon: <Leaf size={22} strokeWidth={1.5} />,
+    iconKey: "leaf",
     title: "Grown, Not Manufactured",
     description:
       "Bamboo completely regrows in 3 to 5 years without complex replanting — every individual piece starts as a purely organic, renewable resource.",
   },
   {
-    icon: <Hammer size={22} strokeWidth={1.5} />,
+    iconKey: "hammer",
     title: "Hand-Finished by Artisans",
     description:
       "No assembly lines. Each product is intricately shaped, woven, and smoothly sanded by seasoned rural craftsmen across Bangladesh.",
   },
   {
-    icon: <Truck size={22} strokeWidth={1.5} />,
+    iconKey: "truck",
     title: "Nationwide Protected Shipping",
     description:
       "Wrapped thoroughly in conscious packaging and dispatched with reliable handling tiers optimized for fragile home goods.",
   },
   {
-    icon: <ShieldCheck size={22} strokeWidth={1.5} />,
+    iconKey: "shield",
     title: "Built to Last, Guaranteed",
     description:
       "Shielded with high-grade, food-safe finishes resisting regional humidity, supported by a 6-month structural warranty.",
   },
 ];
+
+// আইকন ম্যাপার অবজেক্ট
+const iconMap: Record<string, LucideIcon> = {
+  leaf: Leaf,
+  hammer: Hammer,
+  truck: Truck,
+  shield: ShieldCheck,
+};
 
 export default function WhyChooseUs(): JSX.Element {
   return (
@@ -58,7 +68,7 @@ export default function WhyChooseUs(): JSX.Element {
         style={{ background: `radial-gradient(circle, ${colors.cream} 0%, transparent 70%)` }}
       />
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
         
@@ -76,7 +86,7 @@ export default function WhyChooseUs(): JSX.Element {
           color: ${colors.cream} !important;
           transform: scale(1.05);
         }
-      `}</style>
+      `}} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
@@ -85,7 +95,6 @@ export default function WhyChooseUs(): JSX.Element {
           <div className="lg:col-span-5 relative h-[450px] md:h-[600px] w-full group rounded-2xl overflow-hidden shadow-xl">
             <div className="absolute inset-0 bg-black/10 z-10 transition-opacity group-hover:opacity-0 duration-500" />
             <Image
-              // Replace this path with your own artisan production workspace photo
               src="/WhatsApp Image 2026-07-09 at 15.14.25.jpeg" 
               alt="Artisans crafting woven bamboo furniture"
               fill
@@ -118,28 +127,33 @@ export default function WhyChooseUs(): JSX.Element {
             </div>
 
             <div className="flex flex-col gap-8 md:gap-10">
-              {reasons.map((reason, i) => (
-                <div
-                  key={i}
-                  className="row-item group flex gap-5 items-start"
-                >
+              {reasons.map((reason, i) => {
+                // ডাইনামিকালি অবজেক্ট থেকে আইকন কম্পোনেন্ট বের করা হচ্ছে
+                const IconComponent = iconMap[reason.iconKey];
+                
+                return (
                   <div
-                    className="icon-envelope w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "rgba(31,61,43,0.06)", color: colors.forest }}
+                    key={i}
+                    className="row-item group flex gap-5 items-start"
                   >
-                    {reason.icon}
+                    <div
+                      className="icon-envelope w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: "rgba(31,61,43,0.06)", color: colors.forest }}
+                    >
+                      {IconComponent && <IconComponent size={22} strokeWidth={1.5} />}
+                    </div>
+                    
+                    <div className="border-b pb-6 flex-1" style={{ borderColor: "rgba(31,61,43,0.08)" }}>
+                      <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: colors.ink }}>
+                        {reason.title}
+                      </h3>
+                      <p className="text-[13.5px] leading-relaxed font-normal max-w-xl" style={{ color: "rgba(42,42,34,0.65)" }}>
+                        {reason.description}
+                      </p>
+                    </div>
                   </div>
-                  
-                  <div className="border-b pb-6 flex-1" style={{ borderColor: "rgba(31,61,43,0.08)" }}>
-                    <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: colors.ink }}>
-                      {reason.title}
-                    </h3>
-                    <p className="text-[13.5px] leading-relaxed font-normal max-w-xl" style={{ color: "rgba(42,42,34,0.65)" }}>
-                      {reason.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

@@ -62,11 +62,11 @@ const products: Product[] = [
   },
 ];
 
-function ProductCard({ product }: { product: Product }): JSX.Element {
+function ProductCard({ product }: { product: Product }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="product-card group flex flex-col rounded-2xl overflow-hidden bg-white border border-black/5 p-3 transition-all duration-500 hover:shadow-2xl">
+    <div className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-black/5 p-3 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:border-[#1F3D2B]/15">
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl" style={{ backgroundColor: "#EDE7D8" }}>
         {!loaded && (
           <div className="absolute inset-0 animate-pulse" style={{ backgroundColor: "#E3DCC8" }} />
@@ -111,44 +111,26 @@ function ProductCard({ product }: { product: Product }): JSX.Element {
 
         <a
           href="#"
-          className="product-view-btn mt-5 flex items-center justify-center gap-1.5 py-3 rounded-full text-[13px] font-semibold border"
+          className="mt-5 flex items-center justify-center gap-1.5 py-3 rounded-full text-[13px] font-semibold border transition-all duration-300 ease-out group-hover:bg-[#1F3D2B] group-hover:text-white"
           style={{
             borderColor: colors.forest,
             color: colors.forest,
           }}
         >
           View Details
-          <ArrowUpRight size={14} className="btn-arrow transition-transform duration-300" strokeWidth={2} />
+          <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2} />
         </a>
       </div>
     </div>
   );
 }
 
-export default function FeaturedProducts(): JSX.Element {
+export default function FeaturedProducts() {
   return (
-    <section className="py-24 px-5 md:px-8" style={{ backgroundColor: colors.cream, fontFamily: "'Inter', sans-serif" }}>
-      <style>{`
+    <section className="py-24 px-5 md:px-8 font-sans" style={{ backgroundColor: colors.cream }}>
+      <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap');
         .brand-font { font-family: 'Fraunces', serif; }
-        
-        .product-card {
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .product-card:hover {
-          transform: translateY(-8px);
-          border-color: rgba(31,61,43,0.15);
-        }
-        .product-view-btn {
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .group:hover .product-view-btn {
-          background-color: ${colors.forest};
-          color: #FFFFFF !important;
-        }
-        .group:hover .btn-arrow {
-          transform: translate(2px, -2px);
-        }
       `}</style>
 
       <div className="max-w-7xl mx-auto">
