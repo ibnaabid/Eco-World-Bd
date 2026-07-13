@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 
-// Property item model interface
 interface PropertyItem {
   _id: string;
   productName?: string;
@@ -14,7 +13,7 @@ interface PropertyItem {
 }
 
 interface EditBtnProps {
-  product: PropertyItem; // Fixed: Prop validation structure matches incoming data
+  product: PropertyItem;
 }
 
 interface FormState {
@@ -28,7 +27,6 @@ const EditBtn: React.FC<EditBtnProps> = ({ product }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
-  // 🎯 Fixed: Matching form state fields strictly with interface types
   const [form, setForm] = useState<FormState>({
     productName: product?.productName || "",
     pickupAddress: product?.pickupAddress || "",
@@ -45,15 +43,14 @@ const EditBtn: React.FC<EditBtnProps> = ({ product }) => {
   const handleUpdate = async () => {
     setIsSaving(true);
     try {
-      // 🚀 Endpoint matching structural mapping
       const res = await fetch(`http://localhost:5000/products/${product._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productName: form.productName,   // 🎯 Fixed: Passing schema keys instead of title
-          pickupAddress: form.pickupAddress, // 🎯 Fixed: Passing schema keys instead of location
+          productName: form.productName,
+          pickupAddress: form.pickupAddress,
           price: Number(form.price),
         }),
       });
@@ -61,17 +58,15 @@ const EditBtn: React.FC<EditBtnProps> = ({ product }) => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Property updated successfully");
-        setIsOpen(false); // Modal dismiss tracker
-        
-        // 🔄 Realtime Next.js Dynamic Client Router Pipe Refresh Tracker
-        router.refresh(); 
+        toast.success("Product updated successfully!");
+        setIsOpen(false);
+        router.refresh();
       } else {
-        toast.error(data.message || "No changes detected");
+        toast.error(data.message || "Failed to update");
       }
     } catch (error) {
       console.error("Update failed:", error);
-      toast.error("Update failed");
+      toast.error("Update failed. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -79,85 +74,82 @@ const EditBtn: React.FC<EditBtnProps> = ({ product }) => {
 
   return (
     <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-      {/* OPEN TRIGGER */}
+      {/* Trigger Button */}
       <Button variant="secondary" onClick={() => setIsOpen(true)}>
         Edit
       </Button>
 
       <Modal.Backdrop>
         <Modal.Container placement="auto">
-          <Modal.Dialog className="sm:max-w-md bg-[#141416] text-green-600 font-bold border border-white/10 rounded-2xl">
+          <Modal.Dialog className="sm:max-w-md bg-[#141416] text-white border border-white/10 rounded-2xl">
             <Modal.CloseTrigger />
 
-            {/* HEADER */}
+            {/* Header */}
             <Modal.Header>
-              <Modal.Heading className="text-lg font-bold">Edit Property</Modal.Heading>
+              <Modal.Heading className="text-lg font-bold">Edit Product</Modal.Heading>
               <p className="mt-1.5 text-xs text-zinc-400 font-normal">
-                Update your property details
+                Update your product details
               </p>
             </Modal.Header>
 
-            {/* BODY */}
+            {/* Body */}
             <Modal.Body className="p-6">
               <Surface className="bg-transparent">
                 <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-
-                  {/* TITLE */}
                   <TextField>
-                    <Label className="text-zinc-400 text-xs font-medium">Title</Label>
+                    <Label className="text-zinc-400 text-xs font-medium">Product Title</Label>
                     <Input
-                      name="productName" // 🎯 Fixed: Name aligned with State Key
+                      name="productName"
                       value={form.productName}
                       onChange={handleChange}
-                      placeholder="Enter title"
-                      className="bg-green-900 border border-white/10 rounded-xl px-3 py-2 text-sm mt-1 focus:outline-none w-full text-white"
+                      placeholder="Enter product name"
+                      className="bg-[#1F1F21] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none w-full"
                     />
                   </TextField>
 
-                  {/* LOCATION */}
                   <TextField>
-                    <Label className="text-zinc-400 text-xs font-medium">Location</Label>
+                    <Label className="text-zinc-400 text-xs font-medium">Pickup Address</Label>
                     <Input
-                      name="pickupAddress" // 🎯 Fixed: Name aligned with State Key
+                      name="pickupAddress"
                       value={form.pickupAddress}
                       onChange={handleChange}
                       placeholder="Enter address"
-                      className="bg-green-900 border border-white/10 rounded-xl px-3 py-2 text-sm mt-1 focus:outline-none w-full text-white"
+                      className="bg-[#1F1F21] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none w-full"
                     />
                   </TextField>
 
-                  {/* PRICE */}
                   <TextField>
-                    <Label className="text-zinc-400 text-xs font-medium">Price (TK)</Label>
+                    <Label className="text-zinc-400 text-xs font-medium">Price (BDT)</Label>
                     <Input
                       name="price"
                       type="number"
                       value={form.price}
                       onChange={handleChange}
                       placeholder="Enter price"
-                      className="bg-green-900 border border-white/10 rounded-xl px-3 py-2 text-sm mt-1 focus:outline-none w-full text-white"
+                      className="bg-[#1F1F21] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none w-full"
                     />
                   </TextField>
-
                 </form>
               </Surface>
             </Modal.Body>
 
-            {/* FOOTER */}
-            <Modal.Footer className="flex justify-end gap-2">
-              <Button variant="secondary" onClick={() => setIsOpen(false)} className="text-xs font-medium">
+            {/* Footer */}
+            <Modal.Footer className="flex justify-end gap-3 p-6 pt-0">
+              <Button 
+                variant="secondary" 
+                onClick={() => setIsOpen(false)}
+              >
                 Cancel
               </Button>
 
               <Button 
-                disabled={isSaving}
+                isDisabled={isSaving}           // ← Fixed: Use isDisabled instead of disabled
                 onClick={handleUpdate}
-                className="bg-[#C9A876] hover:bg-[#DFBE8C] text-black text-xs font-bold px-4 py-2 rounded-xl transition-all"
+                className="bg-[#C9A876] hover:bg-[#DFBE8C] text-black font-semibold px-5 py-2 rounded-xl transition-all"
               >
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>
             </Modal.Footer>
-
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
