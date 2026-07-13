@@ -26,7 +26,7 @@ const bestSellers: BestSeller[] = [
     category: "Basket",
     price: 1450,
     unitsSold: 1204,
-    image:"/WhatsApp Image 2026-07-09 at 15.14.23.jpeg"
+    image: "/WhatsApp Image 2026-07-09 at 15.14.23.jpeg"
   },
   {
     rank: "02",
@@ -34,7 +34,7 @@ const bestSellers: BestSeller[] = [
     category: "Furniture",
     price: 2800,
     unitsSold: 968,
-    image:"/WhatsApp Image 2026-07-09 at 15.04.05.jpeg"
+    image: "/WhatsApp Image 2026-07-09 at 15.04.05.jpeg"
   },
   {
     rank: "03",
@@ -42,11 +42,12 @@ const bestSellers: BestSeller[] = [
     category: "Lighting",
     price: 2100,
     unitsSold: 845,
-    image:"/WhatsApp Image 2026-07-09 at 15.14.37.jpeg"
+    image: "/WhatsApp Image 2026-07-09 at 15.14.37.jpeg"
   },
 ];
 
-export default function BestSellers(): JSX.Element {
+// 🎯 এখানে : JSX.Element টাইপটি পুরোপুরি বাদ দেওয়া হয়েছে
+export default function BestSellers() {
   const maxUnits = Math.max(...bestSellers.map((b) => b.unitsSold));
 
   return (
@@ -90,8 +91,8 @@ export default function BestSellers(): JSX.Element {
 
               <div className="w-full sm:w-20 h-20 rounded-xl overflow-hidden shrink-0" style={{ backgroundColor: "#2A4A35" }}>
                 <Image
-                height={400}
-                width={400}
+                  height={400}
+                  width={400}
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
