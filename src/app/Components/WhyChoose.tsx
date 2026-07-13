@@ -2,7 +2,6 @@ import React from "react";
 import { Leaf, Hammer, Truck, ShieldCheck, LucideIcon } from "lucide-react";
 import Image from "next/image";
 
-// ১. পিওর ডাটা অবজেক্ট (কোনো JSX উপাদান নেই)
 const colors = {
   forest: "#1F3D2B",
   moss: "#6B8F5C",
@@ -45,7 +44,6 @@ const reasons: ReasonData[] = [
   },
 ];
 
-// আইকন ম্যাপার অবজেক্ট
 const iconMap: Record<string, LucideIcon> = {
   leaf: Leaf,
   hammer: Hammer,
@@ -53,7 +51,7 @@ const iconMap: Record<string, LucideIcon> = {
   shield: ShieldCheck,
 };
 
-export default function WhyChooseUs(): JSX.Element {
+export default function WhyChooseUs() {
   return (
     <section 
       className="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" 
@@ -128,7 +126,6 @@ export default function WhyChooseUs(): JSX.Element {
 
             <div className="flex flex-col gap-8 md:gap-10">
               {reasons.map((reason, i) => {
-                // ডাইনামিকালি অবজেক্ট থেকে আইকন কম্পোনেন্ট বের করা হচ্ছে
                 const IconComponent = iconMap[reason.iconKey];
                 
                 return (
