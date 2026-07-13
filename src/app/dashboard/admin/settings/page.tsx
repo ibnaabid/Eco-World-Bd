@@ -7,7 +7,8 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { authClient } from "../../lib/auth-client";
+import { authClient } from "@/app/lib/auth-client";
+// import { authClient } from "../../lib/auth-client";
 
 const colors = {
   bgPremiumDark: "#0D1B12",
