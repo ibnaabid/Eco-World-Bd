@@ -1,0 +1,89 @@
+# 🚀 Eco World – MERN Stack E-commerce Platform
+
+Eco World is a modern MERN Stack e-commerce platform where users can explore and purchase eco-friendly handmade bamboo products. The application provides secure authentication, product management, wishlist functionality, reviews, and online payment integration.
+
+## 📖 Description
+
+**Eco World** is a full-stack MERN e-commerce platform designed to promote eco-friendly and handmade bamboo products. The platform provides a seamless shopping experience where users can browse products, search and filter items, manage their wishlist, submit reviews, and complete secure online payments through Stripe.
+
+The application includes a role-based authentication system powered by Better Auth and JWT, ensuring secure access to protected resources. An intuitive admin dashboard allows administrators to manage products, monitor orders, and maintain the platform efficiently.
+
+Built with modern web technologies, Eco World focuses on performance, responsiveness, security, and a clean user experience across desktop, tablet, and mobile devices.
+
+---
+
+## ✨ Key Features
+
+* 🔐 Secure Authentication with Better Auth & JWT
+* 🛍️ Product Management (CRUD)
+* ❤️ Wishlist Functionality
+*whats app number add:
+* ⭐ Customer Review System
+* 💳 Stripe Payment Integration
+* 📦 Order Management
+* 🔍 Product Search & Filtering
+* 📱 Fully Responsive Design
+* ⚡ Fast & Modern UI
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+* React.js
+* Next.js
+* TypeScript
+* Tailwind CSS
+* HeroUI
+* Framer Motion
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Better Auth
+* JOSE
+* Stripe
+
+---
+
+## 📂 Project Setup
+
+
+
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Run Client
+
+```bash
+npm run dev
+```
+
+### Run Server
+
+```bash
+npm run start
+```
+
+---
+
+
+
+
+
+
+**Developer:** Abid
+
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
