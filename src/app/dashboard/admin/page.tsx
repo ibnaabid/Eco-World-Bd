@@ -9,11 +9,10 @@ import {
 } from "lucide-react";
 import { authClient } from "../../lib/auth-client";
 
-// লাক্সারি থিম কালার প্যালেট
 const colors = {
-  bgPremiumDark: "#0D1B12", // মেইন ডিপ ব্যাকগ্রাউন্ড
-  cardDark: "#132519",       // কার্ডের ভেতরের ডার্ক শেড
-  bambooTan: "#C9A876",      // গোল্ডেন/ট্যান হাইলাইট
+  bgPremiumDark: "#0D1B12",
+  cardDark: "#132519",
+  bambooTan: "#C9A876",
   moss: "#6B8F5C",
   cream: "#F6F2E9"
 };
@@ -21,7 +20,7 @@ const colors = {
 interface SessionUser {
   name?: string;
   email?: string;
-  image?: string;
+  image?: string | null;     // ← Fixed: Allow null
   role?: string;
 }
 
@@ -66,7 +65,6 @@ export default function DashboardGreetings() {
         className="rounded-3xl p-8 sm:p-10 border border-white/[0.04] shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6"
         style={{ backgroundColor: colors.cardDark }}
       >
-        {/* Background Subtle Gradient Effect */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9A876]/[0.03] blur-[80px] rounded-full pointer-events-none" />
 
         <div className="z-10">
@@ -86,7 +84,6 @@ export default function DashboardGreetings() {
           </p>
         </div>
 
-        {/* Quick Identity Tag */}
         <div className="shrink-0 z-10 bg-white/[0.03] border border-white/[0.06] px-5 py-3 rounded-2xl md:text-center min-w-[140px]">
           <p className="text-[10px] text-white/30 uppercase tracking-widest mb-0.5 font-bold">Access Level</p>
           <p className="text-[14px] font-bold capitalize" style={{ color: colors.bambooTan }}>
@@ -98,7 +95,6 @@ export default function DashboardGreetings() {
       {/* 📊 INFOGRAPHIC DATA MINI CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
-        {/* Email Card */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03] text-white/70">
             <User size={20} style={{ color: colors.bambooTan }} />
@@ -111,7 +107,6 @@ export default function DashboardGreetings() {
           </div>
         </div>
 
-        {/* Verification Status Card */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03]">
             <ShieldCheck size={20} className="text-emerald-500" />
@@ -124,7 +119,6 @@ export default function DashboardGreetings() {
           </div>
         </div>
 
-        {/* Date Card */}
         <div className="rounded-2xl border border-white/[0.04] p-5 flex items-center gap-4 shadow-lg" style={{ backgroundColor: colors.cardDark }}>
           <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.03] text-white/70">
             <Calendar size={20} style={{ color: colors.bambooTan }} />
@@ -136,7 +130,6 @@ export default function DashboardGreetings() {
             </h3>
           </div>
         </div>
-
       </div>
     </div>
   );
