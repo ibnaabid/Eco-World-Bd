@@ -6,7 +6,16 @@ import { useRouter } from "next/navigation";
 import { ShoppingBasket, Menu, ChevronDown, User } from "lucide-react";
 import { authClient } from "@/app/lib/auth-client";
 
-const colors = {
+interface ColorScheme {
+  forest: string;
+  forestDeep: string;
+  moss: string;
+  bambooTan: string;
+  cream: string;
+  ochre: string;
+}
+
+const colors: ColorScheme = {
   forest: "#1F3D2B",
   forestDeep: "#16301F",
   moss: "#6B8F5C",
@@ -211,7 +220,7 @@ interface DesktopActionsProps {
   cartCount: number;
   handleLogout: () => void;
   isPending: boolean;
-  colors: typeof colors;
+  colors: ColorScheme;
 }
 
 function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, colors }: DesktopActionsProps) {
@@ -237,9 +246,7 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
           }
 
           if (link.variant === "username") {
-            return (
-              <UsernameLink key={link.label} label={link.label} href={link.href} colors={colors} />
-            );
+            return <UsernameLink key={link.label} label={link.label} href={link.href} colors={colors} />;
           }
 
           return (
@@ -256,7 +263,7 @@ function DesktopActions({ actionLinks, cartCount, handleLogout, isPending, color
   );
 }
 
-function CartButton({ cartCount, colors }: { cartCount: number; colors: typeof colors }) {
+function CartButton({ cartCount, colors }: { cartCount: number; colors: ColorScheme }) {
   const { cream, ochre } = colors;
   return (
     <button aria-label="Cart" className="relative p-2 rounded-full transition-colors hover:bg-white/5">
@@ -273,7 +280,15 @@ function CartButton({ cartCount, colors }: { cartCount: number; colors: typeof c
   );
 }
 
-function UsernameLink({ label, href, colors }: { label: string; href: string; colors: typeof colors }) {
+function UsernameLink({
+  label,
+  href,
+  colors,
+}: {
+  label: string;
+  href: string;
+  colors: ColorScheme;
+}) {
   return (
     <Link
       href={href}
@@ -295,7 +310,7 @@ function ActionLink({
   label: string;
   href: string;
   variant?: string;
-  colors: typeof colors;
+  colors: ColorScheme;
 }) {
   const { cream, ochre } = colors;
   return (
@@ -316,7 +331,7 @@ function ActionLink({
 interface MobileMenuToggleProps {
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
-  colors: typeof colors;
+  colors: ColorScheme;
 }
 
 function MobileMenuToggle({ menuOpen, setMenuOpen, colors }: MobileMenuToggleProps) {
@@ -350,7 +365,7 @@ interface MobileDropdownProps {
   cartCount: number;
   handleLogout: () => void;
   isPending: boolean;
-  colors: typeof colors;
+  colors: ColorScheme;
 }
 
 function MobileDropdown({
@@ -423,14 +438,7 @@ function MobileDropdown({
                 }
 
                 if (link.variant === "username") {
-                  return (
-                    <UsernameLink
-                      key={link.label}
-                      label={link.label}
-                      href={link.href}
-                      colors={colors}
-                    />
-                  );
+                  return <UsernameLink key={link.label} label={link.label} href={link.href} colors={colors} />;
                 }
 
                 return (
